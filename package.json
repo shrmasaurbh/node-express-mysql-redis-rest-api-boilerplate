@@ -32,5 +32,27 @@
     "eslint": "^6.8.0",
     "nodemon": "^2.0.2",
     "sequelize-cli": "^5.5.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com/shrmasaurbh/node-express-mysql-redis-rest-api-boilerplate.git"
+  },
+  "keywords": [
+    "express",
+    "node",
+    "node.js",
+    "mysql",
+    "jwt",
+    "es6",
+    "es7",
+    "es8",
+    "es2017",
+    "winston",
+    "redis",
+    "REST",
+    "API",
+    "boilerplate",
+    "generator",
+    "starter project"
+  ],
 }
