@@ -7,7 +7,7 @@ module.exports = {
         var restResponse = {};
         var queryString = queryStr.trim().replace(/-/g, "");
         queryString = queryString.replace(/[()]/g, ' ');
-        
+        var error = {	is_error:0};
         try{
         	const esResponse = await new Promise(function(resolve, reject) { 
 		        esClient.search({
@@ -46,28 +46,28 @@ module.exports = {
 	                }
 	            });
 		    }).catch(function(err){
-		    	return {	message:err.message,
+		    	var error = {	message:err.message,
 			    			is_error:1,
-			    			data:[]
-			    		}
+			    		}; 
 	            console.log("err.message1");
 	        });
-	        if(esResponse['hits']['hits']){
-		    	return {message:"success",is_error:0,data:esResponse['hits']['hits']}
-
+	        
+	        if(error.is_error){
+	        	console.log("err.message2",error);
+	        	var msg = error.message ? error.message : "No data is found"; 
+		    	return {message:msg,is_error:1,data:[]}
 	        }else{
-	            console.log("err.message2");
-		    	return {message:"No data is found",is_error:1,data:[]}
-		    	// return {message:"success",is_error:0,data:esResponse['hits']['hits']}
-
+	        	
+		        var msg = esResponse['hits']['total']> 0 ? "success" : "No data is found"; 
+		    	return {message:msg,is_error:0,data:esResponse['hits']['hits']}
 	        }
-	        // return esResponse['hits']['hits'];
+
 
         }catch (err) {
 
+        	// console.log(err);
 		    return {message:err.message,is_error:1,data:[]}
             //throw error in json response with status 500.
-        	// console.log(err);
             // return err;
 
         }

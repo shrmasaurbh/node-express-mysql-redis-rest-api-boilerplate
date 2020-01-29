@@ -29,37 +29,32 @@ module.exports = {
     },
 
     async autocomplete(req,res) {
+        var meta ={
+                    "status": 200,
+                    // "error" : false
+                }
 
         if (typeof req.query.q !== 'undefined' || req.query.q !== null) {
             var queryStr = req.query.q;
 
             try{
                 const resultData = await SearchDB.getAutocomplete(queryStr);
+                
+
                 if(resultData.is_error){
-                    var err = {
-                        message : resultData.message
-                    }
-
-                    apiResp.apiErr( req, res, 400, err);
-                // console.log("resultData",resultData);
-
+                    meta.message = resultData.message;
+                    return apiResp.apiErr( req, res, 400, meta);
                 }
-                var meta ={
-                    "status": 200,
-                    // "error" : false
-                }
-                apiResp.apiResp( req, res, resultData, meta );
+                
+                return apiResp.apiResp( req, res, resultData['data'], meta );
 
             }catch (err) {
-                // apiResp.apiErr( req, res, 400, err);  
+                return apiResp.apiErr( req, res, 400, err);  
             }
 
         }else{
-            var err = {
-                        message : "Query string is not proper"
-                    }
-
-            apiResp.apiErr( req, res, 400, err);
+            meta.message = "Query string is not proper";
+            return apiResp.apiErr( req, res, 400, meta);
         }
       },
 
