@@ -33,18 +33,33 @@ module.exports = {
         if (typeof req.query.q !== 'undefined' || req.query.q !== null) {
             var queryStr = req.query.q;
 
-            const resultData = await SearchDB.getAutocomplete(queryStr);
-            var meta ={
-                "status": 200,
-                // "error" : false
-            }
-            apiResp.apiResp( req, res, resultData, meta );
+            try{
+                const resultData = await SearchDB.getAutocomplete(queryStr);
+                if(resultData.is_error){
+                    var err = {
+                        message : resultData.message
+                    }
 
-            /*return resultData.then(function(result) {
-                res.set('Access-Control-Allow-Origin', '*');
-                res.set('Content-Type', 'application/json');
-                // res.send(JSON.stringify(result))
-            });*/
+                    apiResp.apiErr( req, res, 400, err);
+                // console.log("resultData",resultData);
+
+                }
+                var meta ={
+                    "status": 200,
+                    // "error" : false
+                }
+                apiResp.apiResp( req, res, resultData, meta );
+
+            }catch (err) {
+                // apiResp.apiErr( req, res, 400, err);  
+            }
+
+        }else{
+            var err = {
+                        message : "Query string is not proper"
+                    }
+
+            apiResp.apiErr( req, res, 400, err);
         }
       },
 
