@@ -46,7 +46,19 @@ module.exports = {
                     return apiResp.apiErr( req, res, 400, meta);
                 }
                 
-                return apiResp.apiResp( req, res, resultData['data'], meta );
+                if(resultData['data'].length>0){
+                    console.log("ddddd")
+                    var data = [];
+                    resultData['data'].forEach((value) => {
+                                var arr ={};
+                                arr.id = value['_source'].id;
+                                arr.title = value['_source'].title;
+                                arr.project_name = value['_source'].project_name;
+                                arr.price = parseInt(value['_source'].price);
+                                data.push(arr);
+                            });
+                    return apiResp.apiResp( req, res, data, meta );
+                }
 
             }catch (err) {
                 return apiResp.apiErr( req, res, 400, err);  
