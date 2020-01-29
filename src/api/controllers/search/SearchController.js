@@ -47,7 +47,6 @@ module.exports = {
                 }
                 
                 if(resultData['data'].length>0){
-                    console.log("ddddd")
                     var data = [];
                     resultData['data'].forEach((value) => {
                                 var arr ={};
