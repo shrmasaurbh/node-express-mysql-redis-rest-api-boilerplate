@@ -11,6 +11,15 @@ const apiResp = require(BASEPATH+'/src/helpers/apiResponse');
 
 module.exports = {
 
+    async test(req, res) {
+        var meta ={
+                    "status": 200,
+                    "message" : "TEST DONE"
+                }
+        var data = {}
+        apiResp.apiResp( req, res, data, meta =meta );
+        
+    },
     async userRegister(req, res) {
         try {
             // Extract the validation errors from a request.
