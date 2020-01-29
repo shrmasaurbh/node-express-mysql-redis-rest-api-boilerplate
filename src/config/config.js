@@ -3,7 +3,7 @@ require('dotenv').config();
 let CONFIG = {} //Make this global to use all over the application
 
 CONFIG.app          = process.env.APP   || 'development';
-CONFIG.port         = process.env.PORT  || '3000';
+CONFIG.port         = process.env.PORT  || '4000';
 
 CONFIG.mysqldb_dialect   = process.env.MYSQLDB_DIALECT    || 'mysql';
 CONFIG.mysqldb_host      = process.env.MYSQLDB_HOST       || 'localhost';

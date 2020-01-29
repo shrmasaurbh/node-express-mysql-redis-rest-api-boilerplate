@@ -12,6 +12,9 @@ module.exports = {
 	    metaData.error = false;
 	    metaData.message = errResponse[metaData.status].message;
 		
+
+	    console.log(data);
+
 		const response = { data, meta: metaData };
 	    
 	    if (json) {

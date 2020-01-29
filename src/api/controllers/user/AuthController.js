@@ -64,6 +64,7 @@ module.exports = {
     },
 
     async userLogin(req, res) {
+        console.log(req)
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {

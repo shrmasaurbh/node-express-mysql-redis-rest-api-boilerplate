@@ -106,10 +106,10 @@ app.use(function(req, res, next) {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-    return res.status(200).json({});
-  }
+    // res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET")
+  // if (req.method === "OPTIONS") {
+  //   return res.status(200).json({});
+  // }
   next();
 });
 
@@ -139,6 +139,7 @@ app.all("*", function(req, res,next) {
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
+  console.log("err",err)
   res.locals.message = err.message;
 
   res.locals.error = req.app.get('env') === 'development' ? err : {};
