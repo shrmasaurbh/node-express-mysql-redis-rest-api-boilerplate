@@ -47,15 +47,15 @@ connection.sequelize.authenticate().then(() => {
     console.error('Unable to connect to SQL database:',CONFIG.mysqldb_name, err);
 });
 
-var client = redis.createClient()
+// var client = redis.createClient()
 // var client = redis.createClient(CONFIG.redis_port, CONFIG.redis_host);
-client.on('connect', function() {
-    console.log('Redis client connected');
-});
+// client.on('connect', function() {
+//     console.log('Redis client connected');
+// });
 
-client.on('error', function (err) {
-    console.log('Something went wrong ' + err);
-});
+// client.on('error', function (err) {
+//     console.log('Something went wrong ' + err);
+// });
 
 // compress all requests
 app.use(compress())
