@@ -111,7 +111,7 @@ module.exports = {
                 }
 
                 var data = [];
-                
+
                 if(resultData['data'].length>0){
                     resultData['data'].forEach((value) => {
                                 var arr ={};

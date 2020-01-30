@@ -109,7 +109,7 @@ module.exports = {
         // var esQuery = '{"must":{"multi_match":{"fields" : ["tags", "name"], "query" : "'+queryString+'", "type": "cross_fields", "analyzer": "standard", "operator": "and", "fuzziness": "AUTO"} },';
         var esQuery = '{"must":{"multi_match":{"fields" : ["tags", "name"], "query" : "' + queryString.toLowerCase() + '", "analyzer": "standard", "operator": "and"} },';
 
-
+        console.log("esQuery",esQuery);
         // esQuery += '"filter":{ "bool" : { "must" : [{"term": {"is_active": 1 }},';
         esQuery += '"filter":{ "bool" : { "must" : [';
         if (urlObj.filters) {
@@ -197,24 +197,51 @@ module.exports = {
 
     async getListBySection(section) {
         var err = {	is_error:0};
-        try{
-	        const esResponse = await esClient.get({
-	            "index": index,
-	            "type": indexType,
-	            "id": id,
-	            "ignore":404
+
+	        const esResponse = await new Promise(function(resolve, reject) { 
+	        	esClient.search({
+		            "index": index,
+		            "type": indexType,
+		            "size": 8,
+		            "body": {
+		                "query": {
+		                	"match_all":{
+
+		                	}
+		                },
+		                // "aggs": {
+		                //     "max_price": { "max": { "field": "price" } },
+		                //     "min_price": { "min": { "field": "price" } },
+		                //     "origin": { "terms": { "field": "type" } },
+		                //     "brands": { "terms": { "field": "brand_id" } },
+		                //     "compatibility": { "terms": { "field": "model_id" } }
+		                // }
+		            }
+		        },function(error, results, fields) {
+	                if (error) {
+	                	console.log("in reject")
+	                    reject(error);
+	                } else {
+	                    resolve(results);
+	                    // return results;
+	                }
+	            });
+		    }).catch(function(err){
+		    	// var err = {	message:err.message,
+			    // 			is_error:1,
+			    // 		}; 
+		    	return {message:err.message,is_error:1,data:[]}
 	        });
 
-	        if(esResponse.found){
-		    	return {message:"success",is_error:0,data:esResponse._source}
 
+	        if(esResponse.is_error){
+	        	console.log("err.message2",esResponse);
+	        	var msg = esResponse.message ? esResponse.message : "No data is found"; 
+		    	return {message:msg,is_error:1,data:[]}
 	        }else{
-		    	return {message:"Data Not Found",is_error:1,data:[]}
+		        var msg = esResponse['hits']['total']> 0 ? "success" : "No data is found"; 
+		    	return {message:msg,is_error:0,data:esResponse['hits']['hits']}
 	        }
-
-        }catch (err) {
-		    return {message:err.message,is_error:1,data:[]}
-        }
 
     },
 }
