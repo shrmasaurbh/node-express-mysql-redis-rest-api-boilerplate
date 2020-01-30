@@ -45,7 +45,7 @@ module.exports = {
                     meta.message = resultData.message;
                     return apiResp.apiErr( req, res, 400, meta);
                 }
-                
+                console.log(resultData['data']);
                 if(resultData['data'].length>0){
                     var data = [];
                     resultData['data'].forEach((value) => {
@@ -54,6 +54,7 @@ module.exports = {
                                 arr.title = value['_source'].title;
                                 arr.project_name = value['_source'].project_name;
                                 arr.price = parseInt(value['_source'].price);
+                                // arr.city = value['_source'].city;
                                 data.push(arr);
                             });
                     return apiResp.apiResp( req, res, data, meta );

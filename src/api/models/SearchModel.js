@@ -1,18 +1,18 @@
 const esClient = require('../../config/esconfig');
-
+const index = "homesfy_search";
+const type = "projects";
 
 module.exports = {
 
 	async getAutocomplete(queryStr) {
-        var restResponse = {};
         var queryString = queryStr.trim().replace(/-/g, "");
         queryString = queryString.replace(/[()]/g, ' ');
-        var error = {	is_error:0};
-        try{
+        var err = {	is_error:0};
+        // try{
         	const esResponse = await new Promise(function(resolve, reject) { 
 		        esClient.search({
-		            "index": "homesfy_search",
-		            "type": "projects",
+		            "index": index,
+		            "type": type,
 		            "body": {
 		                "query": {
 		                    "bool": {
@@ -39,6 +39,7 @@ module.exports = {
 		            }
 		        },function(error, results, fields) {
 	                if (error) {
+	                	console.log("in reject")
 	                    reject(error);
 	                } else {
 	                    resolve(results);
@@ -46,32 +47,63 @@ module.exports = {
 	                }
 	            });
 		    }).catch(function(err){
-		    	var error = {	message:err.message,
-			    			is_error:1,
-			    		}; 
-	            console.log("err.message1");
+		    	// var err = {	message:err.message,
+			    // 			is_error:1,
+			    // 		}; 
+		    	return {message:err.message,is_error:1,data:[]}
 	        });
-	        
-	        if(error.is_error){
-	        	console.log("err.message2",error);
-	        	var msg = error.message ? error.message : "No data is found"; 
+
+
+	        if(esResponse.is_error){
+	        	console.log("err.message2",esResponse);
+	        	var msg = esResponse.message ? esResponse.message : "No data is found"; 
 		    	return {message:msg,is_error:1,data:[]}
 	        }else{
-	        	
 		        var msg = esResponse['hits']['total']> 0 ? "success" : "No data is found"; 
 		    	return {message:msg,is_error:0,data:esResponse['hits']['hits']}
 	        }
+	        
+	        console.log(esResponse, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 
+
+      //   }catch (err) {
+
+      //   	console.log("err", err);
+		    // return {message:err.message,is_error:1,data:[]}
+      //       //throw error in json response with status 500.
+      //       // return err;
+
+      //   }
+
+    },
+    async getDetailsById(id) {
+        var err = {	is_error:0};
+        try{
+	        const esResponse = await esClient.get({
+	            "index": index,
+	            "type": type,
+	            "id": id,
+	            "ignore":404
+	        });
+
+	        if(esResponse.found){
+		    	return {message:"success",is_error:0,data:esResponse._source}
+
+	        	esResponse
+	        }else{
+		    	return {message:"Data Not Found",is_error:1,data:[]}
+	        }
+	        console.log("esResponse",esResponse);
 
         }catch (err) {
 
-        	// console.log(err);
+        	console.log("err", err);
 		    return {message:err.message,is_error:1,data:[]}
             //throw error in json response with status 500.
             // return err;
 
         }
-        
+
     },
 
     async getSearchData(queryStr, bhk_filter = null) {
