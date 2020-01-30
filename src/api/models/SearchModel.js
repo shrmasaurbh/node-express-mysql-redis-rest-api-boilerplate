@@ -192,5 +192,29 @@ module.exports = {
 		    	return {message:msg,is_error:0,data:esResponse['hits']}
 	        }
 
-    }
+    },
+
+
+    async getListBySection(section) {
+        var err = {	is_error:0};
+        try{
+	        const esResponse = await esClient.get({
+	            "index": index,
+	            "type": indexType,
+	            "id": id,
+	            "ignore":404
+	        });
+
+	        if(esResponse.found){
+		    	return {message:"success",is_error:0,data:esResponse._source}
+
+	        }else{
+		    	return {message:"Data Not Found",is_error:1,data:[]}
+	        }
+
+        }catch (err) {
+		    return {message:err.message,is_error:1,data:[]}
+        }
+
+    },
 }
