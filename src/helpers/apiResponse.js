@@ -11,7 +11,7 @@ module.exports = {
 
 	    metaData.error = false;
 	    metaData.message = errResponse[metaData.status].message;
-		metaData.count = data.length>0 ? data.length : 0;
+		// metaData.count = data.length>0 ? data.length : 0;
 
 		const response = { data, meta: metaData };
 	    

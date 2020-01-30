@@ -7,7 +7,7 @@ module.exports = {
                     "status": 200,
                     // "error" : false
                 }
-                console.log(req.params)
+                
         var projectId = parseInt(req.params.projectId)
         if(typeof projectId !== 'undefined' || !isNaN(projectId)){
             const resultData = await SearchDB.getDetailsById(projectId);
@@ -28,9 +28,9 @@ module.exports = {
     },
 
     async getSearchListing(req,res) {
-
-        var postData = req.params.data;
-        postData = JSON.parse(postData);
+        var postData = req.body;  
+        // postData = JSON.parse(postData);
+        // console.log("req.params",postData);
 
         if (typeof postData.query !== 'undefined' || postData.query !== null) {
             var urlObj = {}
@@ -53,7 +53,7 @@ module.exports = {
             if(postData.filters){
                 urlObj.filters = postData.filters[0];
             }
-            const resultData = esModel.getSearchData(urlObj);
+            const resultData = esModel.getSearchListing(urlObj);
             // console.log(resultData)
             return resultData.then(function(result) {
                 var resResponse = {};
@@ -81,6 +81,52 @@ module.exports = {
                 // ctx.body = result;
             });
         }
-      }
+    },
+
+    async getListBySection(req, res) {
+        var meta ={
+                    "status": 200,
+                    // "error" : false
+                }
+                
+        var section = req.query.section.toString();
+
+        if(typeof section !== 'undefined' || section != null){
+            try{
+                const resultData = await SearchDB.getListBySection(section);
+                
+
+                if(resultData.is_error){
+                    meta.message = resultData.message;
+                    return apiResp.apiErr( req, res, 400, meta);
+                }
+
+                var data = [];
+                
+                if(resultData['data'].length>0){
+                    resultData['data'].forEach((value) => {
+                                var arr ={};
+                                arr.id = value['_source'].id;
+                                arr.title = value['_source'].title;
+                                arr.project_name = value['_source'].project_name;
+                                arr.price = parseInt(value['_source'].price);
+                                // arr.city = value['_source'].city;
+                                data.push(arr);
+                            });
+                    return apiResp.apiResp( req, res, data, meta );
+                }else{
+                    return apiResp.apiResp( req, res, data, meta );
+                }
+
+            }catch (err) {
+                return apiResp.apiErr( req, res, 400, err);  
+            }
+
+        }else{
+            meta.message = "Query string is not proper";
+            return apiResp.apiErr( req, res, 400, meta);
+        }
+      
+    }
 }
 

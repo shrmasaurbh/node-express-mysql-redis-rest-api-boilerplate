@@ -24,6 +24,9 @@ module.exports = {
                 var data = [];
                 
                 if(resultData['data'].length>0){
+                    
+                    meta.count = resultData['data'].length;
+
                     resultData['data'].forEach((value) => {
                                 var arr ={};
                                 arr.id = value['_source'].id;

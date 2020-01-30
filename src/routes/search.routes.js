@@ -10,7 +10,8 @@ const listingCont = require("../api/controllers/search/ListingController");
 //   // .all(authenticate)
 //   .get(searchCont.autocomplete)
 router.get('/autocomplete', searchCont.autocomplete);
-router.post('/list', listingCont.getSearchListing);
 router.get('/details/:projectId', listingCont.getDetailsById);
+router.post('/list', listingCont.getSearchListing);
+router.get('/sectionlist', listingCont.getListBySection);
 module.exports = router;
 
