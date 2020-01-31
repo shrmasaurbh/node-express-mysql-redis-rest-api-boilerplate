@@ -11,7 +11,7 @@ const listingCont = require("../api/controllers/search/ListingController");
 //   .get(searchCont.autocomplete)
 router.get('/autocomplete', searchCont.autocomplete);
 router.get('/details/:projectId', listingCont.getDetailsById);
-router.post('/list', listingCont.getSearchListing);
 router.get('/sectionlist', listingCont.getListBySection);
+router.post('/list', listingCont.getSearchListing);
 module.exports = router;
 
