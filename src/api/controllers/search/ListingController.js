@@ -68,6 +68,8 @@ module.exports = {
 
                 var data = [];
                 // console.log(resultData['data']['hits'].length);
+                meta.count = 0;
+                
                 if(resultData['data']['total']){
                     
                     meta.count = resultData['data']['total'];

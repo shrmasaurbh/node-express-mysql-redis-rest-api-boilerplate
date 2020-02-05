@@ -39,12 +39,11 @@ module.exports = {
                 //hash input password
                 const hash = bcrypt.hashSync(req.body.password, 10)
                 var user = {
-                        firstName: req.body.firstName,
-                        lastName: req.body.lastName,
+                        name: req.body.name,
                         email: req.body.email,
                         password: hash,
-                        phoneNo: req.body.phoneNo,
-                        isActive: 1
+                        mobile_number: parseInt(req.body.mobile_number),
+                        is_active: 1
                     };
                 console.log(user)
 						// Save user.
@@ -86,19 +85,18 @@ module.exports = {
             } else {
                 try{
 
-                    await UserDB.findOne({ where: {phoneNo: req.body.phoneNo} }).then(user => {
+                    await UserDB.findOne({ where: {mobile_number: req.body.mobile_number} }).then(user => {
                         if (user) {
                             //Compare given password with db's hash.
                             bcrypt.compare(req.body.password, user.password, function(err, match) {
                                 if (match) {
     			                
                                     //Check account confirmation.
-                                    if (user.isActive) {
+                                    if (user.is_active) {
                                         // Check User's account active or not.
                                             let userData = {
                                                 id: user.id,
-                                                firstName: user.firstName,
-                                                lastName: user.lastName,
+                                                name: user.name,
                                                 email: user.email,
                                             };
                                             //Prepare JWT token for authentication

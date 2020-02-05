@@ -130,12 +130,13 @@ module.exports = {
             if (urlObj.filters.price) {
                 if (urlObj.filters.price.length === 1) {
                     esQuery += '{"range" : {"price" : {"gte" : ' + urlObj.filters.price[0].from + ', "lte" : ' + urlObj.filters.price[0].to + '}}}';
-                } else {
+                } 
+                /*else {
                     let firstPrice = urlObj.filters.price[0];
                     let lastPrice = urlObj.filters.price[urlObj.filters.price.length - 1];
 
                     esQuery += '{"range" : {"price" : {"gte" : ' + firstPrice.from + ', "lte" : ' + lastPrice.to + '}}}';
-                }
+                }*/
             }
         }
         esQuery += ']}}'
@@ -181,7 +182,7 @@ module.exports = {
 		    	return {message:err.message,is_error:1,data:[]}
 	        });
 
-        // console.log("esResponse......",esResponse)
+        console.log("esResponse......",esResponse)
 
 	        if(esResponse.is_error){
 	        	console.log("err.message2",esResponse);

@@ -5,23 +5,26 @@ module.exports = {
     async userAll(req, res) {
         try{
 
-            user = await UserDB.findAll().then(data => {
-                    // console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-                    // console.log(data)
-                    var meta ={
-                        "status": 200,
-                        // "error" : false
-                    }
-                    // console.log(meta)
-                    // throw new Error('Invalid object');
-                    
-                    apiResp.apiResp( req, res, data, meta );
-                    // console.log(aa)
-                    // res.status(200).send(data);
-                })
-                .catch(err => {
-                    apiResp.apiErr( req, res, 300, err);
-                })
+            user = await UserDB.findAll({attributes: {
+                                                        exclude: ['password']
+                                                      }})
+                    .then(data => {
+                        // console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                        // console.log(data)
+                        var meta ={
+                            "status": 200,
+                            // "error" : false
+                        }
+                        // console.log(meta)
+                        // throw new Error('Invalid object');
+                        
+                        apiResp.apiResp( req, res, data, meta );
+                        // console.log(aa)
+                        // res.status(200).send(data);
+                    })
+                    .catch(err => {
+                        apiResp.apiErr( req, res, 300, err);
+                    })
         } 
         catch (err) {
             apiResp.apiErr( req, res, 300, err);
