@@ -53,6 +53,8 @@ module.exports = {
             urlObj.query = postData.query;
             urlObj.filters = null;
 
+            meta.count = 0;
+            
             if(postData.filters){
                 urlObj.filters = postData.filters[0];
             }
@@ -68,7 +70,6 @@ module.exports = {
 
                 var data = [];
                 // console.log(resultData['data']['hits'].length);
-                meta.count = 0;
                 
                 if(resultData['data']['total']){
                     
