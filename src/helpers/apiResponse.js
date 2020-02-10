@@ -9,8 +9,14 @@ module.exports = {
 	    // 	metaData.error = true;
 	    // }
 
-	    metaData.error = false;
-	    metaData.message = errResponse[metaData.status].message;
+	    metaData.error = 0;
+	    if(meta.message == undefined){
+	    // console.log("errrrrrrrrrrrrr")
+	    	metaData.message = errResponse[metaData.status].message;
+	    }else{
+
+	    	metaData.message = meta.message;
+	    }
 		// metaData.count = data.length>0 ? data.length : 0;
 
 		const response = { data, meta: metaData };
@@ -29,7 +35,7 @@ module.exports = {
 	    var metaData = {}
 
 	    // console.log(err.message)
-	    metaData.error = true;
+	    metaData.error = 1;
 	    metaData.status = status;
 	    if(err.message == undefined){
 	    // console.log("errrrrrrrrrrrrr")

@@ -6,6 +6,8 @@ const middleware = require("../api/middleware/auth.middleware");
 
 router.post("/register",   middleware.registerMiddleware, userAuth.userRegister);
 router.post("/login", middleware.loginMiddleware, userAuth.userLogin);
+router.post("/forgot_password", middleware.forgotpwMiddleware, userAuth.forgotPassword);
+router.patch("/change_password", middleware.changepwMiddleware, userAuth.changePassword);
 router.post("/test", userAuth.test);
 
 module.exports = router;

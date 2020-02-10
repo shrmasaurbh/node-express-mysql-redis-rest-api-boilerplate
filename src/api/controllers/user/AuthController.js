@@ -22,13 +22,12 @@ module.exports = {
     },
     async userRegister(req, res) {
         try {
+            var err = {};
             // Extract the validation errors from a request.
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-            	console.log("last1",errors)
-                var err ={
-                    message : errors.errors
-                }
+
+                err.message = errors.errors
 
                 apiResp.apiErr( req, res, 300, err);
 
@@ -49,7 +48,7 @@ module.exports = {
 						// Save user.
 				user = await UserDB.create(user).then(data => {
                     var meta ={
-                        "status": 200,
+                        "status": 201,
                         // "error" : false
                     }
                     console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
@@ -72,72 +71,149 @@ module.exports = {
     },
 
     async userLogin(req, res) {
-        console.log(req)
-        try {
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                var err ={
-                    message : errors.errors
-                }
+        var err = {
+            status : 200,
+            message : ""
+        };
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
 
-                apiResp.apiErr( req, res, 300, err);
+            err.message = errors.errors
 
-            } else {
-                try{
-
-                    await UserDB.findOne({ where: {mobile_number: req.body.mobile_number} }).then(user => {
-                        if (user) {
-                            //Compare given password with db's hash.
-                            bcrypt.compare(req.body.password, user.password, function(err, match) {
-                                if (match) {
-    			                
-                                    //Check account confirmation.
-                                    if (user.is_active) {
-                                        // Check User's account active or not.
-                                            let userData = {
-                                                id: user.id,
-                                                name: user.name,
-                                                email: user.email,
-                                            };
-                                            //Prepare JWT token for authentication
-                                            const jwtPayload = userData;
-                                            const jwtData = {
-                                                expiresIn: CONFIG.jwt_expiration,
-                                            };
-                                            const secret = CONFIG.jwt_encryption;
-                                            console.log(jwtData)
-                                            console.log(secret)
-                                            //Generated JWT token with Payload and secret.
-                                            userData.secret = secret;
-                                            userData.jwtData = jwtData;
-                                            userData.token = jwt.sign(jwtPayload, secret, jwtData);
-                                             var meta ={
-                                                    "status": 200,
-                                                    // "error" : false
-                                                }
-                                                // console.log(meta)
-                                                // throw new Error('Invalid object');
-                                                
-                                                apiResp.apiResp( req, res, userData, meta );
-                                    } else {
-                                        apiResp.apiErr( req, res, 300);
-                                    }
-                                } else {
-                                    apiResp.apiErr( req, res, 300);
-                                }
-                            });
-                        } else {
-                            apiResp.apiErr( req, res, 300);
-                        }
-                    });
-                }
-                catch (err) {
-                    apiResp.apiErr( req, res, 300);
-                }
-            }
-        } catch (err) {
             apiResp.apiErr( req, res, 300, err);
 
+        } else {
+            try{
+
+               var user = await UserDB.findOne({ where: {mobile_number: req.body.mobile_number} })
+                if (user != null) {
+                    user = user.dataValues
+               console.log("user", user.password)
+                    //Compare given password with db's hash.
+                    bcrypt.compare(req.body.password, user.password, function(err, match) {
+                        var err = {}
+
+                        if (match) {
+		                
+                            //Check account confirmation.
+                            if (user.is_active) {
+                                // Check User's account active or not.
+                                    let userData = {
+                                        id: user.id,
+                                        name: user.name,
+                                        email: user.email,
+                                    };
+                                    //Prepare JWT token for authentication
+                                    const jwtPayload = userData;
+                                    const jwtData = {
+                                        expiresIn: CONFIG.jwt_expiration,
+                                    };
+                                    const secret = CONFIG.jwt_encryption;
+                                    console.log(jwtData)
+                                    console.log(secret)
+                                    //Generated JWT token with Payload and secret.
+                                    userData.secret = secret;
+                                    userData.jwtData = jwtData;
+                                    userData.token = jwt.sign(jwtPayload, secret, jwtData);
+                                    
+                                    var meta ={
+                                        "status": 201,
+                                        // "error" : false
+                                    }  
+                                    apiResp.apiResp( req, res, userData, meta );
+                            } else {
+                                err.message = "User is not active";
+                                apiResp.apiErr( req, res, 400, err);
+                            }
+                        } else {
+                            
+                            err.message = "Incorrect Password";
+                            apiResp.apiErr( req, res, 400, err);
+                        }
+                    });
+                } else {
+                    err.message = "User is not found";
+                    apiResp.apiErr( req, res, 400,err);
+                }
+            
+            }
+            catch (err) {
+                console.log("ddddddddd")
+                apiResp.apiErr( req, res, 300,err);
+            }
+        }
+    },
+
+    async forgotPassword(req, res) {
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            console.log("last1",errors)
+            var err ={
+                message : errors.errors
+            }
+
+            apiResp.apiErr( req, res, 400, err);
+
+            // Display sanitized values/errors messages.
+            // return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
+        } else {
+            var meta ={
+                        "status": 200,
+                        message : "Phone number is found"
+                        // "error" : false
+                    }
+            apiResp.apiResp( req, res, [], meta =meta );
+        }
+    },
+
+    async changePassword(req, res) {
+            
+        var err = {};
+        var meta ={
+                    "status": 200,
+                    // "error" : false
+                }
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+
+            err.message = errors.errors
+
+            apiResp.apiErr( req, res, 400, err);
+
+            // Display sanitized values/errors messages.
+            // return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
+        } else {
+
+            //hash input password
+            const hash = bcrypt.hashSync(req.body.password, 10)
+
+            try {
+
+                user = await UserDB.update(
+                                            { password: hash },
+                                            { where: { mobile_number: req.body.mobile_number } }
+                                        )
+
+                if(user[0]){
+                    apiResp.apiResp( req, res, [], meta =meta );
+
+                }else{
+                    meta.status = 400;
+                    meta.message = "Password is not Changed";
+                    apiResp.apiResp( req, res, [], meta =meta );
+
+                }
+            }
+            catch (err) {
+                apiResp.apiErr( req, res, 400, err);
+            }
+
+
+
+                
         }
     },
 }

@@ -31,18 +31,14 @@ const Sequelize =require('sequelize')
 const db = require('../../config/connections');
 
 module.exports = db.sequelize.define('users', {
-	// user_id: {
-	// 	type: Sequelize.INTEGER,
-	// 	primaryKey:true,
-	// 	autoIncrement:true,
-	// 	allowNull: false,
- //        // field: 'user_id',
+	user_id: {
+		type: Sequelize.INTEGER,
+		primaryKey:true,
+		autoIncrement:true,
+		allowNull: false,
+        // field: 'user_id',
 
-	// },
-
-
-
-	
+	},	
 
 	name : {
 		type: Sequelize.STRING
