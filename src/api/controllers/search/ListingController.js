@@ -122,6 +122,7 @@ module.exports = {
                                 arr.title = value['_source'].title;
                                 arr.project_name = value['_source'].project_name;
                                 arr.price = parseInt(value['_source'].price);
+                                arr.bed_config = parseInt(value['_source'].bed_config);
                                 // arr.city = value['_source'].city;
                                 data.push(arr);
                             });

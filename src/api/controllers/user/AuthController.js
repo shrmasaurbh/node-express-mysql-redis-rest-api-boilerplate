@@ -118,7 +118,7 @@ module.exports = {
                                     userData.token = jwt.sign(jwtPayload, secret, jwtData);
                                     
                                     var meta ={
-                                        "status": 201,
+                                        "status": 200,
                                         // "error" : false
                                     }  
                                     apiResp.apiResp( req, res, userData, meta );
