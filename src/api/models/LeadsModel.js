@@ -1,5 +1,6 @@
 const Sequelize =require('sequelize')
 const db = require('../../config/connections');
+const leadStatusDB = require("./LeadStatusModel");
 
 module.exports = db.sequelize.define('leads', {
 	lead_id: {
@@ -17,8 +18,13 @@ module.exports = db.sequelize.define('leads', {
 	project_name : {
 		type: Sequelize.STRING
 	},
-	lead_status_id : Sequelize.INTEGER,
+	 // : Sequelize.INTEGER,
 
+	 lead_status_id: {
+              type: Sequelize.INTEGER,
+              model: 'lead_status', // <<< Note, its table's name, not object name
+              key: 'status_id' // <<< Note, its a column name
+        },
 	magent_rm : Sequelize.INTEGER,
 	
 	crosssale_rm : Sequelize.INTEGER,
@@ -52,3 +58,5 @@ module.exports = db.sequelize.define('leads', {
          type: Sequelize.DATE,
      },
 });
+
+// leadStatusDB.belongsToMany(leads);

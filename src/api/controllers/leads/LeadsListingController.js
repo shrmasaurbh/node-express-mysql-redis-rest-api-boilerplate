@@ -11,26 +11,6 @@ module.exports = {
         var postData = req.body;  
         // postData = JSON.parse(postData);
         console.log("req.params",postData);
-        // const resultData = await leadsDB.find();
-                // user = await leadsDB.findAll()
-                //     .then(data => {
-                //         console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-                //         console.log(data)
-                //         var meta ={
-                //             "status": 200,
-                //             // "error" : false
-                //         }
-                //         // console.log(meta)
-                //         // throw new Error('Invalid object');
-                        
-                //         // apiResp.apiResp( req, res, data, meta );
-                //         // res.status(200).send(data);
-                //     })
-                //     .catch(err => {
-                //         console.log(err)
-                //         // apiResp.apiErr( req, res, 300, err);
-                //     })
-            // console.log("resultData",user)
         // if (typeof postData.query !== 'undefined' || postData.query !== null) {
             var filters = {}
 
@@ -57,7 +37,7 @@ module.exports = {
             // const resultData = await SearchDB.getSearchListing(urlObj);
             try{
                 // const resultData = await leadsDB.find(urlObj);
-                user = await leadsDB.findAll({ offset: fromData, limit: size, raw: true
+                const { count, rows: leads } = await leadsDB.findAndCountAll({ offset: fromData, limit: size, raw: true
                                             });
                     // .then(data => {
                     //     // console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
@@ -77,10 +57,10 @@ module.exports = {
                     //     apiResp.apiErr( req, res, 300, err);
                     // })
 
-
-                if(user.length){
+                console.log("leads",leads)
+                if(count){
                     // var data = [];
-                    meta.count = user.length;
+                    meta.count = count;
 
                     meta.pageId = pageId;
                     meta.from = fromData;
@@ -91,7 +71,7 @@ module.exports = {
                                 // data.push(value['_source']);
                             // });
                     // data = ;
-                    return apiResp.apiResp( req, res, user, meta );
+                    return apiResp.apiResp( req, res, leads, meta );
                     
 
 

@@ -20,6 +20,17 @@ module.exports = {
         apiResp.apiResp( req, res, data, meta =meta );
         
     },
+    // userLogout(req, res) {
+    //     var meta ={
+    //                 "status": 200,
+    //                 "message" : "TEST DONE"
+    //             }
+    //     var data = {}
+    //     userData.token = jwt.distroy(jwtPayload);
+        
+    //     apiResp.apiResp( req, res, data, meta =meta );
+        
+    // },
     async userRegister(req, res) {
         try {
             var err = {};
@@ -72,7 +83,6 @@ module.exports = {
 
     async userLogin(req, res) {
         var err = {
-            status : 200,
             message : ""
         };
         // Extract the validation errors from a request.
