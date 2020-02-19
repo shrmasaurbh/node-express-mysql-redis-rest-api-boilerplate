@@ -121,7 +121,7 @@ module.exports = {
                                 arr.id = value['_source'].id;
                                 arr.title = value['_source'].title;
                                 arr.project_name = value['_source'].project_name;
-                                arr.price = parseInt(value['_source'].price);
+                                arr.price = parseInt(value['_source'].config[0].price);
                                 arr.bed_config = '';
                                 bed_config = [];
                                 value['_source'].config.forEach((val) =>{
@@ -131,7 +131,7 @@ module.exports = {
 
                                 });
                                 arr.bed_config = bed_config.toString();
-                                
+
                                 data.push(arr);
                             });
                     return apiResp.apiResp( req, res, data, meta );
