@@ -1,6 +1,6 @@
 const esClient = require('../../config/esconfig');
 const index = "homesfy_live";
-const indexType = "nlive_projects";
+const indexType = "live_projects";
 
 module.exports = {
 
@@ -52,7 +52,6 @@ module.exports = {
 			    // 		}; 
 		    	return {message:err.message,is_error:1,data:[]}
 	        });
-
 
 	        if(esResponse.is_error){
 	        	console.log("err.message2",esResponse);

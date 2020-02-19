@@ -32,9 +32,17 @@ module.exports = {
                                 arr.id = value['_source'].id;
                                 arr.title = value['_source'].title;
                                 arr.project_name = value['_source'].project_name;
-                                arr.price = parseInt(value['_source'].price);
-                                arr.bed_config = parseInt(value['_source'].bed_config);
-                                // arr.city = value['_source'].city;
+                                arr.price = parseInt(value['_source'].config[0].price);
+                                arr.bed_config = '';
+                                bed_config = [];
+                                value['_source'].config.forEach((val) =>{
+                                    if(bed_config.indexOf(val.bed_config) === -1) {
+                                      bed_config.push(val.bed_config);
+                                    }
+
+                                });
+                                arr.bed_config = bed_config.toString();
+
                                 data.push(arr);
                             });
                     return apiResp.apiResp( req, res, data, meta );
