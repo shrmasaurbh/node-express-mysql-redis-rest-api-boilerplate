@@ -114,21 +114,21 @@ module.exports = {
         if (urlObj.filters) {
 
             if (urlObj.filters.bed_config) {
-                esQuery += '{"terms":{"bed_config":' + JSON.stringify(urlObj.filters.bed_config) + ' }},';
+                esQuery += '{"term":{"config.bed_config":' + JSON.stringify(urlObj.filters.bed_config) + ' }},';
             }
 
-            if (urlObj.filters.property_type) {
-                esQuery += '{"terms":{"property_type":' + JSON.stringify(urlObj.filters.property_type) + ' }},';
-            }
+            // if (urlObj.filters.property_type) {
+            //     esQuery += '{"terms":{"property_type":' + JSON.stringify(urlObj.filters.property_type) + ' }},';
+            // }
 
-            if (urlObj.filters.sale_type) {
-                esQuery += '{"terms":{"sale_type":' + JSON.stringify(urlObj.filters.sale_type) + ' }},';
-            }
+            // if (urlObj.filters.sale_type) {
+            //     esQuery += '{"terms":{"sale_type":' + JSON.stringify(urlObj.filters.sale_type) + ' }},';
+            // }
 
             var priceRange = '';
             if (urlObj.filters.price) {
                 if (urlObj.filters.price.length === 1) {
-                    esQuery += '{"range" : {"price" : {"gte" : ' + urlObj.filters.price[0].from + ', "lte" : ' + urlObj.filters.price[0].to + '}}}';
+                    esQuery += '{"range" : {"config.price" : {"gte" : ' + urlObj.filters.price[0].from + ', "lte" : ' + urlObj.filters.price[0].to + '}}}';
                 } 
                 /*else {
                     let firstPrice = urlObj.filters.price[0];
