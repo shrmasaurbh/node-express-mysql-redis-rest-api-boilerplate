@@ -82,6 +82,15 @@ module.exports = {
                     
                     resultData['data']['hits'].forEach((value) => {
                                 value['_source'].price = parseInt(value['_source'].config[0].price);
+
+                                bed_config = [];
+                                value['_source'].config.forEach((val) =>{
+                                    if(bed_config.indexOf(val.bed_config) === -1) {
+                                      bed_config.push(val.bed_config);
+                                    }
+
+                                });
+                                value['_source'].bed_config = bed_config.toString();
                                 data.push(value['_source']);
                             });
                     
