@@ -81,6 +81,7 @@ module.exports = {
                     meta.total_page = Math.ceil(meta.count / urlObj.size);
                     
                     resultData['data']['hits'].forEach((value) => {
+                                value['_source'].price = parseInt(value['_source'].config[0].price);
                                 data.push(value['_source']);
                             });
                     
