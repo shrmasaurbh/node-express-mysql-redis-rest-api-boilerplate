@@ -67,7 +67,7 @@ module.exports = {
       }
     } else {
       err.message = "auth header is not found"
-      apiResp.apiErr( req, res, 300, err);
+      apiResp.apiErr( req, res, 400, err);
 
     }
   }
