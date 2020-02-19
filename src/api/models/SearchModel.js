@@ -1,6 +1,6 @@
 const esClient = require('../../config/esconfig');
-const index = "homesfy_new";
-const indexType = "new_projects";
+const index = "homesfy_live";
+const indexType = "nlive_projects";
 
 module.exports = {
 
