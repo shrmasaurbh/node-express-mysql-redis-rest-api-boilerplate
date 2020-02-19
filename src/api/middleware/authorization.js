@@ -56,6 +56,7 @@ module.exports = {
         result = jwt.verify(token, CONFIG.jwt_encryption, options);
         meta.status =200;
         meta.message ="Session removed";
+        console.log("verification");
 
         apiResp.apiResp( req, res, [], meta );
 
