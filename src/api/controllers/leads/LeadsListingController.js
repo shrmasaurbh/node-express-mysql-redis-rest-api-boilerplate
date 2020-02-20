@@ -71,6 +71,11 @@ module.exports = {
                                 // data.push(value['_source']);
                             // });
                     // data = ;
+                    leads.forEach((val) =>{
+                                    val['createdAt'] = new Date(val['createdAt']).toGMTString();
+                                    val['updatedAt'] = new Date(val['updatedAt']).toGMTString();
+
+                                });
                     return apiResp.apiResp( req, res, leads, meta );
                     
 

@@ -27,6 +27,8 @@ module.exports = {
             //     meta.message = resultData.message;
             //     return apiResp.apiErr( req, res, 400, meta);
             // }
+            resultData['createdAt'] = new Date(resultData['createdAt']).toGMTString();
+            resultData['updatedAt'] = new Date(resultData['updatedAt']).toGMTString();
             apiResp.apiResp( req, res, resultData, meta );
 
         
