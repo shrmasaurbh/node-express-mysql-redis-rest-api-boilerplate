@@ -28,13 +28,15 @@ module.exports = {
                     meta.count = resultData['data'].length;
 
                     resultData['data'].forEach((value) => {
-                                var arr ={};
-                                arr.id = value['_source'].id;
-                                arr.title = value['_source'].title;
+                                var arr = {};
+                                arr.id           = value['_source'].id;
+                                arr.title        = value['_source'].title;
                                 arr.project_name = value['_source'].project_name;
-                                arr.price = parseInt(value['_source'].config[0].price);
+                                arr.price        = parseInt(value['_source'].config[0].price);
+                                arr.slug         = value['_source'].region.toLowerCase()+'/property/'+value['_source'].project_name.replace(" ", "-").toLowerCase();
+
                                 arr.bed_config = '';
-                                bed_config = [];
+                                bed_config     = [];
                                 value['_source'].config.forEach((val) =>{
                                     if(bed_config.indexOf(val.bed_config) === -1) {
                                       bed_config.push(val.bed_config);

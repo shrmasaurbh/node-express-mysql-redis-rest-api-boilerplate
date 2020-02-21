@@ -16,6 +16,8 @@ module.exports = {
                 meta.message = resultData.message;
                 return apiResp.apiErr( req, res, 400, meta);
             }
+            // console.log()
+            resultData['data'].slug = resultData['data'].region.toLowerCase()+'/property/'+resultData['data'].project_name.replace(" ", "-").toLowerCase();
             return apiResp.apiResp( req, res, resultData['data'], meta );
 
         
@@ -76,13 +78,14 @@ module.exports = {
                     meta.count = resultData['data']['total'];
 
                     meta.pageId = urlObj.pageId;
-                    meta.from = urlObj.fromData;
-                    meta.size = urlObj.size;
+                    meta.from   = urlObj.fromData;
+                    meta.size   = urlObj.size;
                     meta.total_page = Math.ceil(meta.count / urlObj.size);
                     
                     resultData['data']['hits'].forEach((value) => {
-                                value['_source'].price = parseInt(value['_source'].config[0].price);
-                                value['_source'].property_area = value['_source'].config[0].property_area;
+                                value['_source'].price          = parseInt(value['_source'].config[0].price);
+                                value['_source'].property_area  = value['_source'].config[0].property_area;
+                                value['_source'].slug           = value['_source'].region.toLowerCase()+'/property/'+value['_source'].project_name.replace(" ", "-").toLowerCase();
 
                                 bed_config = [];
                                 value['_source'].config.forEach((val) =>{
@@ -128,13 +131,15 @@ module.exports = {
 
                 if(resultData['data'].length>0){
                     resultData['data'].forEach((value) => {
-                                var arr ={};
-                                arr.id = value['_source'].id;
-                                arr.title = value['_source'].title;
+                                var arr = {};
+                                arr.id           = value['_source'].id;
+                                arr.title        = value['_source'].title;
                                 arr.project_name = value['_source'].project_name;
-                                arr.price = parseInt(value['_source'].config[0].price);
+                                arr.price        = parseInt(value['_source'].config[0].price);
+                                arr.slug         = value['_source'].region.toLowerCase()+'/property/'+value['_source'].project_name.replace(" ", "-").toLowerCase();
+
                                 arr.bed_config = '';
-                                bed_config = [];
+                                bed_config     = [];
                                 value['_source'].config.forEach((val) =>{
                                     if(bed_config.indexOf(val.bed_config) === -1) {
                                       bed_config.push(val.bed_config);
