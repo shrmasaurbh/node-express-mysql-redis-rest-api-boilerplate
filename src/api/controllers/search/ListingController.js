@@ -16,7 +16,7 @@ module.exports = {
                 meta.message = resultData.message;
                 return apiResp.apiErr( req, res, 400, meta);
             }
-            resultData['data'].slug = resultData['data'].region.toLowerCase()+'/property/'+resultData['data'].project_name.replace(" ", "-").toLowerCase();
+            resultData['data'].slug = resultData['data'].region.toLowerCase()+'/property/'+resultData['data'].project_namestr.split(' ').join('-').toLowerCase();
             console.log(resultData['data'])
             return apiResp.apiResp( req, res, resultData['data'], meta );
 
