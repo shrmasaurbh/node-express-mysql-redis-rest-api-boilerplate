@@ -16,7 +16,8 @@ module.exports = {
                 meta.message = resultData.message;
                 return apiResp.apiErr( req, res, 400, meta);
             }
-            resultData['data'].slug = resultData['data'].region.toLowerCase()+'/property/'+resultData['data'].project_namestr.split(' ').join('-').toLowerCase();
+            var p_name = resultData['data'].project_name.toLowerCase();
+            resultData['data'].slug = resultData['data'].region.toLowerCase()+'/property/'+p_name.split(' ').join('-');
             console.log(resultData['data'])
             return apiResp.apiResp( req, res, resultData['data'], meta );
 
@@ -136,7 +137,8 @@ module.exports = {
                                 arr.title        = value['_source'].title;
                                 arr.project_name = value['_source'].project_name;
                                 arr.price        = parseInt(value['_source'].config[0].price);
-                                arr.slug         = value['_source'].region.toLowerCase()+'/property/'+value['_source'].project_name.replace(" ", "-").toLowerCase();
+                                var p_name       = value['_source'].project_name.toLowerCase();
+                                arr.slug         = value['_source'].region.toLowerCase()+'/property/'+p_name.split(' ').join('-');
 
                                 arr.bed_config = '';
                                 bed_config     = [];
@@ -181,7 +183,8 @@ module.exports = {
                 return apiResp.apiErr( req, res, 400, meta);
             }
             // console.log()
-            resultData['data'].slug = resultData['data'].region.toLowerCase()+'/property/'+resultData['data'].project_name.replace(" ", "-").toLowerCase();
+            var p_name = resultData['data'].project_name.toLowerCase();
+            resultData['data'].slug = resultData['data'].region.toLowerCase()+'/property/'+p_name.split(' ').join('-');
             return apiResp.apiResp( req, res, resultData['data'], meta );
 
         
