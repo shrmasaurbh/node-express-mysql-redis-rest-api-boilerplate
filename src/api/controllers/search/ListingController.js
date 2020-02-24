@@ -16,8 +16,8 @@ module.exports = {
                 meta.message = resultData.message;
                 return apiResp.apiErr( req, res, 400, meta);
             }
-            // console.log()
             resultData['data'].slug = resultData['data'].region.toLowerCase()+'/property/'+resultData['data'].project_name.replace(" ", "-").toLowerCase();
+            console.log(resultData['data'])
             return apiResp.apiResp( req, res, resultData['data'], meta );
 
         
@@ -161,6 +161,33 @@ module.exports = {
 
         }else{
             meta.message = "Query string is not proper";
+            return apiResp.apiErr( req, res, 400, meta);
+        }
+      
+    },
+
+    async getListByRegion(req, res) {
+        var meta ={
+                    "status": 200,
+                    // "error" : false
+                }
+                
+        var region = parseInt(req.params.region);
+        if(typeof region !== 'undefined' || !isNaN(region)){
+            const resultData = await SearchDB.getListByRegion(region);
+        
+            if(resultData.is_error){
+                meta.message = resultData.message;
+                return apiResp.apiErr( req, res, 400, meta);
+            }
+            // console.log()
+            resultData['data'].slug = resultData['data'].region.toLowerCase()+'/property/'+resultData['data'].project_name.replace(" ", "-").toLowerCase();
+            return apiResp.apiResp( req, res, resultData['data'], meta );
+
+        
+
+        }else{
+            meta.message = "Project Id is not proper";
             return apiResp.apiErr( req, res, 400, meta);
         }
       
