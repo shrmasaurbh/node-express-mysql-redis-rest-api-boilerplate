@@ -33,8 +33,9 @@ module.exports = {
                                 arr.title        = value['_source'].title;
                                 arr.project_name = value['_source'].project_name;
                                 arr.price        = parseInt(value['_source'].config[0].price);
-                                arr.slug         = value['_source'].region.toLowerCase()+'/property/'+value['_source'].project_name.replace(" ", "-").toLowerCase();
-
+                                var p_name       = value['_source'].project_name.toLowerCase();
+                                arr.slug         = value['_source'].region.toLowerCase()+'/property/'+p_name.split(' ').join('-');
+                                
                                 arr.bed_config = '';
                                 bed_config     = [];
                                 value['_source'].config.forEach((val) =>{
