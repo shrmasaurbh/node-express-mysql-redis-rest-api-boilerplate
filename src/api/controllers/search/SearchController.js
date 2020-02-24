@@ -34,8 +34,9 @@ module.exports = {
                                 arr.project_name = value['_source'].project_name;
                                 arr.price        = parseInt(value['_source'].config[0].price);
                                 var p_name       = value['_source'].project_name.toLowerCase();
+                                var p_name       = p_name.split(' ').join('-');
                                 arr.slug         = value['_source'].region.toLowerCase()+'/property/'+p_name.split(' ').join('-');
-                                console.log(arr)
+                                console.log(apiErr)
                                 arr.bed_config = '';
                                 bed_config     = [];
                                 value['_source'].config.forEach((val) =>{
