@@ -130,7 +130,8 @@ app.use('/api', router);
 // catch 404 and forward to error handler
 // throw 404 if URL not found
 app.all("*", function(req, res,next) {
-  const error = new Error("URL not found");
+  console.log(req.originalUrl)
+  const error = new Error("URL not found : "+req.originalUrl);
   error.status = 404;
   next(error);
 	// return apiResponse.notFoundResponse(res, "Page not found");
