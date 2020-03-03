@@ -1,57 +1,28 @@
-// module.exports = (sequelize, DataType) => {
-//   const Users = sequelize.define('Users', {
-//     id: {
-//       type: DataType.INTEGER,
-//       primaryKey: true,
-//       autoIncrement: true
-//     },
-//     title: {
-//       type: DataType.STRING,
-//       allowNull: false,
-//       validate: {
-//         notEmpty: true
-//       }
-//     },
-//     done: {
-//       type: DataType.BOOLEAN,
-//       allowNull: false,
-//       defaultValue: false
-//     }
-//   }, {
-//     classMethods: {
-//       associate: (models) => {
-//         Users.belongsTo(models.Users);
-//       }
-//     }
-//   });
-//   return Users;
-// };
-
 const Sequelize =require('sequelize')
 const db = require('../../config/connections');
 
-module.exports = db.sequelize.define('users', {
-	user_id: {
-		type: Sequelize.INTEGER,
+module.exports = function(sequelize, DataTypes){
+	var users = sequelize.define('users', {
+		user_id: {
+		type: DataTypes.INTEGER,
 		primaryKey:true,
 		autoIncrement:true,
 		allowNull: false,
-        // field: 'user_id',
-
+		// field: 'user_id',
 	},	
 
 	name : {
-		type: Sequelize.STRING
+		type: DataTypes.STRING
 	},
 	
 	email : {
-		type: Sequelize.STRING,
+		type: DataTypes.STRING,
 		allowNull: false,
 		validate: { isEmail: {msg: "Phone number invalid."} }
 	},
 	
 	mobile_number : {
-		type: Sequelize.INTEGER,
+		type: DataTypes.INTEGER,
 		allowNull: false,
 		unique: true, 
 		validate : {
@@ -60,34 +31,44 @@ module.exports = db.sequelize.define('users', {
 	},
 	
 	password : {
-		type: Sequelize.STRING,
+		type: DataTypes.STRING,
 		allowNull: false,
 	},
 	
-	role : Sequelize.INTEGER,
+	role : DataTypes.INTEGER,
 	
-	max_lead : Sequelize.INTEGER,
+	max_lead : DataTypes.INTEGER,
 	
-	rating : Sequelize.BOOLEAN,
+	rating : DataTypes.BOOLEAN,
 	
-	city : Sequelize.STRING,
+	city : DataTypes.STRING,
 	
-	region_id : Sequelize.DECIMAL(10,2),
+	region_id : DataTypes.DECIMAL(10,2),
 	
-	last_log_in : Sequelize.BOOLEAN,
+	last_log_in : DataTypes.BOOLEAN,
 
-	deleted_by : Sequelize.INTEGER,
+	deleted_by : DataTypes.INTEGER,
 	
-	is_online : Sequelize.BOOLEAN,
+	is_online : DataTypes.BOOLEAN,
 	
-	is_active : Sequelize.BOOLEAN,
+	is_active : DataTypes.BOOLEAN,
 
 	createdAt: {
-         field: 'created_at',
-         type: Sequelize.DATE,
-     },
-     updatedAt: {
-         field: 'updated_at',
-         type: Sequelize.DATE,
-     },
-});
+		 field: 'created_at',
+		 type: DataTypes.DATE,
+	 },
+	 updatedAt: {
+		 field: 'updated_at',
+		 type: DataTypes.DATE,
+	 }
+	},{
+	  // don't add the timestamp attributes (updatedAt, createdAt)
+		timestamps: false,
+		freezeTableName: true,
+  		tableName: 'users'
+
+	  // your other configuration here
+
+	})
+	return users;
+};

@@ -63,11 +63,10 @@ const db = require('../../config/connections');
 // });
 
 // leadStatusDB.belongsToMany(leads);
-
-
+   
 module.exports = function(sequelize, DataTypes){
-	const leads = sequelize.define('leads', {
-		lead_id: {
+	const clients = sequelize.define('clients', {
+		client_id: {
 		type: DataTypes.INTEGER,
 		primaryKey:true,
 		autoIncrement:true,
@@ -75,65 +74,55 @@ module.exports = function(sequelize, DataTypes){
         // field: 'user_id',
 
 	},
+	client_name : {
+		type: DataTypes.STRING
+	},
 
-	team_id : {
+	client_number : {
               type: DataTypes.INTEGER,
-              // model: user, // <<< Note, its table's name, not object name
-              // key: 'team_id' // <<< Note, its a column name
         },
-	source_id : DataTypes.INTEGER,
+	client_email : DataTypes.STRING,
+    
+    alternate_number : {
+          type: DataTypes.INTEGER,
+    },
 	
-	client_id : DataTypes.INTEGER,
+	property_for : DataTypes.STRING,
+	country : DataTypes.STRING,
+	nationality : DataTypes.STRING,
+	city : DataTypes.STRING,
+	min_budget : DataTypes.FLOAT,
+	max_budget : DataTypes.FLOAT,
+	current_location : DataTypes.STRING,
+	required_BHK : DataTypes.STRING,
+	company : DataTypes.STRING,
+	locality : DataTypes.STRING,
+	occupation : DataTypes.STRING,
+	designation : DataTypes.STRING,
+	ethinicity : DataTypes.STRING,
+	country_code : DataTypes.STRING,
+	ismarried : DataTypes.BOOLEAN,
 
 	 // : DataTypes.INTEGER,
 
-	lead_status_id: {
-              type: DataTypes.INTEGER,
-              model: 'lead_status', // <<< Note, its table's name, not object name
-              key: 'status_id' // <<< Note, its a column name
-        },
-
-	project_name : {
-		type: DataTypes.STRING
-	},
-	magent_rm : DataTypes.INTEGER,
-	
-	crosssale_rm : DataTypes.INTEGER,
-	
-	lead_added_by : DataTypes.INTEGER,
-	
-	presale_rm : DataTypes.INTEGER,
-	
-	referred_by : DataTypes.INTEGER,
-	
-	admin_message : {
-		type: DataTypes.TEXT(100)
-	},
-
-	loan_amount : DataTypes.INTEGER,
-
-	loan_required : DataTypes.BOOLEAN,
-	
-	is_magnet : DataTypes.BOOLEAN,
-	
-	is_crosssale : DataTypes.BOOLEAN,
-	
-	is_presale : DataTypes.BOOLEAN,
-	
-	is_active : DataTypes.BOOLEAN,
-	
-	deleted_by : DataTypes.INTEGER,
-
-	createdAt: {
-         field: 'coming_date',
+	birth_date: {
          type: DataTypes.DATE,
      },
-     updatedAt: {
-         field: 'updated_at',
+     anniversary_date: {
          type: DataTypes.DATE,
      },
+	
+	loan_sanction : DataTypes.BOOLEAN,
+	bookamount_details: DataTypes.STRING,
+	flat_type: DataTypes.STRING,
+	flat_no: DataTypes.STRING,
+	building_number: DataTypes.STRING,
+	carpet_area: DataTypes.STRING,
+	agreement_value: DataTypes.STRING,
+	booking_amount: DataTypes.STRING,
+
 })
 // leads.hasMany(user, {foreignKey: 'team_id'});
 
-	return leads;
+	return clients;
 };

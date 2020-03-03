@@ -1,5 +1,13 @@
-const leadsDB = require("../../models/LeadsModel");
+const leads = require("../../models/LeadsModel");
 const apiResp = require(BASEPATH+'/src/helpers/apiResponse');
+// const Sequelize =require('sequelize')
+const db = require('../../../config/connections');
+    // sequelize = db.sequelize,
+    // Sequelize = db.Sequelize;
+    // console.log(db.Sequelize)
+// const user = require("../../models/UserModel");
+
+// user.hasMany(leadsDB, {foreignKey: 'team_id'});
 
 module.exports = {
 
@@ -37,9 +45,53 @@ module.exports = {
             // const resultData = await SearchDB.getSearchListing(urlObj);
             try{
                 // const resultData = await leadsDB.find(urlObj);
-                const { count, rows: leads } = await leadsDB.findAndCountAll({ offset: fromData, limit: size, raw: true
-                                            });
-                    // .then(data => {
+                const { count, rows: leads } = await db.leads.findAndCountAll({ include: [
+                                                                                            {
+                                                                                              model: db.lead_status,
+                                                                                              as: "lead_status",
+                                                                                            },{
+                                                                                              model: db.users,
+                                                                                              as: "team",
+                                                                                              attributes: ['user_id','name']
+                                                                                            },
+                                                                                            {
+                                                                                              model: db.users,
+                                                                                              as: "lead_addedby",
+                                                                                              attributes: ['user_id','name']
+                                                                                            },
+                                                                                            {
+                                                                                              model: db.users,
+                                                                                              as: "presalerm",
+                                                                                              attributes: ['user_id','name']
+                                                                                            },
+                                                                                            {
+                                                                                              model: db.users,
+                                                                                              as: "referredby",
+                                                                                              attributes: ['user_id','name']
+                                                                                            },
+                                                                                            {
+                                                                                              model: db.users,
+                                                                                              as: "crosssalerm",
+                                                                                              attributes: ['user_id','name']
+                                                                                            },
+                                                                                            {
+                                                                                              model: db.users,
+                                                                                              as: "magentrm",
+                                                                                              attributes: ['user_id','name']
+                                                                                            },
+                                                                                            {
+                                                                                              model: db.clients,
+                                                                                              as: "client_details",
+                                                                                              attributes: ['client_id','client_name','client_email','client_number']
+                                                                                            },
+                                                                                            {
+                                                                                              model: db.sources,
+                                                                                              as: "source",
+                                                                                            }
+                                                                                          ],
+                                                                                offset: fromData, limit: size
+                                                                            });
+                        // .then(data => {
                     //     // console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                     //     // console.log(data)
                     //     var meta ={
@@ -57,7 +109,7 @@ module.exports = {
                     //     apiResp.apiErr( req, res, 300, err);
                     // })
 
-                console.log("leads",leads)
+                // console.log("leads",leads)
                 if(count){
                     // var data = [];
                     meta.count = count;

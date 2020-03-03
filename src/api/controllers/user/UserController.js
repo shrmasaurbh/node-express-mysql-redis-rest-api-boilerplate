@@ -1,11 +1,12 @@
-const UserDB = require("../../models/UserModel");
+// const UserDB = require("../../models/UserModel");
 const apiResp = require(BASEPATH+'/src/helpers/apiResponse');
+const db = require('../../../config/connections');
 
 module.exports = {
     async userAll(req, res) {
         try{
 
-            user = await UserDB.findAll({attributes: {
+            user = await db.users.findAll({attributes: {
                                                         exclude: ['password']
                                                       }})
                     .then(data => {

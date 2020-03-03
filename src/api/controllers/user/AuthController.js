@@ -2,11 +2,12 @@ const { body, validationResult } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
 //helper file to prepare responses.
 const apiResponse = require("../../../helpers/apiResponse");
-const UserDB = require("../../models/UserModel");
+// const UserDB = require("../../models/UsersModel_remove");
 // const utility = require("../helpers/utility");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const apiResp = require(BASEPATH+'/src/helpers/apiResponse');
+const db = require('../../../config/connections');
 
 
 module.exports = {
@@ -57,7 +58,7 @@ module.exports = {
                     };
                 console.log(user)
 						// Save user.
-				user = await UserDB.create(user).then(data => {
+				user = await db.users.create(user).then(data => {
                     var meta ={
                         "status": 201,
                         // "error" : false
@@ -96,7 +97,7 @@ module.exports = {
         } else {
             try{
 
-               var user = await UserDB.findOne({ where: {mobile_number: req.body.mobile_number} })
+               var user = await db.users.findOne({ where: {mobile_number: req.body.mobile_number} })
                 if (user != null) {
                     user = user.dataValues
                console.log("user", user.password)
@@ -202,7 +203,7 @@ module.exports = {
 
             try {
 
-                user = await UserDB.update(
+                user = await db.users.update(
                                             { password: hash },
                                             { where: { mobile_number: req.body.mobile_number } }
                                         )

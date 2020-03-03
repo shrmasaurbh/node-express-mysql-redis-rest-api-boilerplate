@@ -1,5 +1,6 @@
 const leadStatusDB = require("../../models/LeadStatusModel");
 const apiResp = require(BASEPATH+'/src/helpers/apiResponse');
+const db = require('../../../config/connections');
 
 module.exports = {
 
@@ -11,9 +12,27 @@ module.exports = {
             // const resultData = await SearchDB.getSearchListing(urlObj);
             try{
                 // const resultData = await leadsDB.find(urlObj);
-                const leads_status = await leadStatusDB.findAll({raw:true});
-                    // .then(data => {
-                        console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",leads_status)
+                const leads_status = await db.lead_status.findAll({raw:true});
+                    var meta ={
+                                "status": 200,
+                                // "message" : ''
+                            };
+
+                    if(leads_status.length){
+                        // meta.message ={
+                        //     "status": 200,
+                        //     message : "Phone number is found"
+                        //     // "error" : false
+                        // }
+                        apiResp.apiResp( req, res, leads_status, meta =meta );
+                    }else{
+                        var err ={
+                                message : "Data not found"
+                            }
+
+                            apiResp.apiErr( req, res, 400, err);
+
+                    }    
                     //     // console.log(data)
                     //     var meta ={
                     //         "status": 200,
