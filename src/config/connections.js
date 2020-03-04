@@ -79,15 +79,15 @@ db.clients = require('../api/models/ClientsModel')(sequelize,Sequelize);
 // })
 // db.leads.belongsTo(db.users , {foreignKey: 'team_id'});
 // db.lead_status.belongsTo(db.leads , {foreignKey: 'status_id',sourceKey: 'lead_status_id'});
-db.leads.hasMany(db.lead_status , {as:'lead_status',foreignKey: 'status_id',sourceKey: 'lead_status_id'});
-db.leads.hasMany(db.sources , {as:'source',foreignKey: 'source_id',sourceKey: 'source_id'});
+db.leads.hasOne(db.lead_status , {as:'lead_status',foreignKey: 'status_id',sourceKey: 'lead_status_id'});
+db.leads.hasOne(db.sources , {as:'source',foreignKey: 'source_id',sourceKey: 'source_id'});
 
-db.leads.hasMany(db.users , {as:'team',foreignKey: 'user_id',sourceKey: 'team_id'});
-db.leads.hasMany(db.users , {as:'lead_addedby',foreignKey: 'user_id',sourceKey: 'lead_added_by'});
-db.leads.hasMany(db.users , {as:'presalerm',foreignKey: 'user_id',sourceKey: 'presale_rm'});
-db.leads.hasMany(db.users , {as:'referredby',foreignKey: 'user_id',sourceKey: 'referred_by'});
-db.leads.hasMany(db.users , {as:'magentrm',foreignKey: 'user_id',sourceKey: 'magent_rm'});
-db.leads.hasMany(db.users , {as:'crosssalerm',foreignKey: 'user_id',sourceKey: 'crosssale_rm'});
+db.leads.hasOne(db.users , {as:'team',foreignKey: 'user_id',sourceKey: 'team_id'});
+db.leads.hasOne(db.users , {as:'lead_addedby',foreignKey: 'user_id',sourceKey: 'lead_added_by'});
+db.leads.hasOne(db.users , {as:'presalerm',foreignKey: 'user_id',sourceKey: 'presale_rm'});
+db.leads.hasOne(db.users , {as:'referredby',foreignKey: 'user_id',sourceKey: 'referred_by'});
+db.leads.hasOne(db.users , {as:'magentrm',foreignKey: 'user_id',sourceKey: 'magent_rm'});
+db.leads.hasOne(db.users , {as:'crosssalerm',foreignKey: 'user_id',sourceKey: 'crosssale_rm'});
 db.leads.hasOne(db.clients , {as:'client_details',foreignKey: 'client_id',sourceKey: 'client_id'});
 // db.leads.hasMany(db.users , {as:'ersss',foreignKey: 'user_id',sourceKey: 'lead_added_by'});
 // db.leads.hasOne(db.users , {as:'ers',foreignKey: 'user_id',sourceKey: 'team_id'});
