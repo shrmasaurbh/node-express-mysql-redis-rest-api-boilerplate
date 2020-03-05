@@ -96,6 +96,9 @@ module.exports = function(sequelize, DataTypes){
 	project_name : {
 		type: DataTypes.STRING
 	},
+	revert_status : {
+		type: DataTypes.STRING
+	},
 	magent_rm : DataTypes.INTEGER,
 	
 	crosssale_rm : DataTypes.INTEGER,
@@ -119,6 +122,8 @@ module.exports = function(sequelize, DataTypes){
 	is_crosssale : DataTypes.BOOLEAN,
 	
 	is_presale : DataTypes.BOOLEAN,
+	
+	assign_status : DataTypes.BOOLEAN,
 	
 	is_active : DataTypes.BOOLEAN,
 	

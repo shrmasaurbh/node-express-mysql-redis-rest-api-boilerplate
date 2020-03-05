@@ -1,12 +1,13 @@
-const leads = require("../../models/LeadsModel");
+const DAL = require("../../DAL/LeadsListing");
 const apiResp = require(BASEPATH+'/src/helpers/apiResponse');
+const {STATUS_TYPES} = require(BASEPATH+'/src/helpers/constants');
 const Sequelize =require('sequelize')
 const db = require('../../../config/connections');
     // sequelize = db.sequelize,
     // Sequelize = db.Sequelize;
     // console.log(db.Sequelize)
 // const user = require("../../models/UserModel");
-
+// console.log(STATUS_TYPES)
 // user.hasMany(leadsDB, {foreignKey: 'team_id'});
 const Op = Sequelize.Op; 
 
@@ -160,7 +161,7 @@ module.exports = {
                 pageId = postData.pageId;
             }
             if (typeof postData.size === 'undefined' || postData.size === null) {
-                size = 16;
+                size = 1000;
             } else {
                 size = postData.size;
             }
@@ -176,56 +177,58 @@ module.exports = {
             }
             // const resultData = await SearchDB.getSearchListing(urlObj);
             try{
+                const { count, rows: leads } = await DAL.LeadsListingByStatusType(leadStatusType, fromData, size, pageId)
+
                 // const resultData = await leadsDB.find(urlObj);
-                const { count, rows: leads } = await db.leads.findAndCountAll({ include: [
-                                                                                            {
-                                                                                              model: db.lead_status,
-                                                                                              as: "lead_status",
-                                                                                              where:{
-                                                                                                status : leadStatusType
-                                                                                              }
-                                                                                            },{
-                                                                                              model: db.users,
-                                                                                              as: "team",
-                                                                                              attributes: ['user_id','name']
-                                                                                            },
-                                                                                            {
-                                                                                              model: db.users,
-                                                                                              as: "lead_addedby",
-                                                                                              attributes: ['user_id','name']
-                                                                                            },
-                                                                                            {
-                                                                                              model: db.users,
-                                                                                              as: "presalerm",
-                                                                                              attributes: ['user_id','name']
-                                                                                            },
-                                                                                            {
-                                                                                              model: db.users,
-                                                                                              as: "referredby",
-                                                                                              attributes: ['user_id','name']
-                                                                                            },
-                                                                                            {
-                                                                                              model: db.users,
-                                                                                              as: "crosssalerm",
-                                                                                              attributes: ['user_id','name']
-                                                                                            },
-                                                                                            {
-                                                                                              model: db.users,
-                                                                                              as: "magentrm",
-                                                                                              attributes: ['user_id','name']
-                                                                                            },
-                                                                                            {
-                                                                                              model: db.clients,
-                                                                                              as: "client_details",
-                                                                                              attributes: ['client_id','client_name','client_email','client_number']
-                                                                                            },
-                                                                                            {
-                                                                                              model: db.sources,
-                                                                                              as: "source",
-                                                                                            }
-                                                                                          ],
-                                                                                offset: fromData, limit: size
-                                                                            });
+                // const { count, rows: leads } = await db.leads.findAndCountAll({ include: [
+                //                                                                             {
+                //                                                                               model: db.lead_status,
+                //                                                                               as: "lead_status",
+                //                                                                               where:{
+                //                                                                                 status : leadStatusType
+                //                                                                               }
+                //                                                                             },{
+                //                                                                               model: db.users,
+                //                                                                               as: "team",
+                //                                                                               attributes: ['user_id','name']
+                //                                                                             },
+                //                                                                             {
+                //                                                                               model: db.users,
+                //                                                                               as: "lead_addedby",
+                //                                                                               attributes: ['user_id','name']
+                //                                                                             },
+                //                                                                             {
+                //                                                                               model: db.users,
+                //                                                                               as: "presalerm",
+                //                                                                               attributes: ['user_id','name']
+                //                                                                             },
+                //                                                                             {
+                //                                                                               model: db.users,
+                //                                                                               as: "referredby",
+                //                                                                               attributes: ['user_id','name']
+                //                                                                             },
+                //                                                                             {
+                //                                                                               model: db.users,
+                //                                                                               as: "crosssalerm",
+                //                                                                               attributes: ['user_id','name']
+                //                                                                             },
+                //                                                                             {
+                //                                                                               model: db.users,
+                //                                                                               as: "magentrm",
+                //                                                                               attributes: ['user_id','name']
+                //                                                                             },
+                //                                                                             {
+                //                                                                               model: db.clients,
+                //                                                                               as: "client_details",
+                //                                                                               attributes: ['client_id','client_name','client_email','client_number']
+                //                                                                             },
+                //                                                                             {
+                //                                                                               model: db.sources,
+                //                                                                               as: "source",
+                //                                                                             }
+                //                                                                           ],
+                //                                                                 offset: fromData, limit: size
+                //                                                             });
                         // .then(data => {
                     //     // console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                     //     // console.log(data)
