@@ -86,6 +86,20 @@ module.exports = {
                     // ]
 					  };
                 break;
+            case "assigned":
+				status = {
+                          model: db.lead_status,
+                          as: "lead_status",
+                        };
+                where= {
+					    // assign_status: 0
+					    // $and: [
+                         assign_status: 1,
+                         team_id:{[Op.ne]: null}
+                         // '$lead_status.status$': STATUS_TYPES[leadStatusType]
+                    // ]
+					  };
+                break;
             case "open":
 				status = {
                           model: db.lead_status,

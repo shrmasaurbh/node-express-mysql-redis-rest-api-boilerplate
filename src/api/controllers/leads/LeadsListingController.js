@@ -161,7 +161,7 @@ module.exports = {
                 pageId = postData.pageId;
             }
             if (typeof postData.size === 'undefined' || postData.size === null) {
-                size = 1000;
+                size = 16;
             } else {
                 size = postData.size;
             }
