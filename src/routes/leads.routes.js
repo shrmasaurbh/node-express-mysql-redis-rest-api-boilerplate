@@ -8,7 +8,8 @@ const leadStatusList = require("../api/controllers/leads/LeadStatusController");
 const authenticate = require('../api/middleware/authorization').authenticate;
 
 router.post('/list', leadList.getLeadsListing);
+router.post('/list/status/:leadStatusType', leadList.getLeadsListingByStatusType);
 router.get('/leads_status', leadStatusList.getLeadStatus);
-router.get('/:leadId',lead.getLeadbyId);
+router.get('/details/:leadId',lead.getLeadbyId);
 
 module.exports = router;
