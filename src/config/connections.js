@@ -88,7 +88,13 @@ db.leads.hasOne(db.users , {as:'presalerm',foreignKey: 'user_id',sourceKey: 'pre
 db.leads.hasOne(db.users , {as:'referredby',foreignKey: 'user_id',sourceKey: 'referred_by'});
 db.leads.hasOne(db.users , {as:'magentrm',foreignKey: 'user_id',sourceKey: 'magent_rm'});
 db.leads.hasOne(db.users , {as:'crosssalerm',foreignKey: 'user_id',sourceKey: 'crosssale_rm'});
-db.leads.hasOne(db.clients , {as:'client_details',foreignKey: 'client_id',sourceKey: 'client_id'});
+db.leads.hasMany(db.clients , {as:'client_details',foreignKey: 'client_id',sourceKey: 'client_id'});
+db.clients.hasMany(db.leads , {as:'lead_details',foreignKey: 'client_id',sourceKey: 'client_id'});
+
+// db.clients.belongsTo(db.leads , {as:'lead_details', foreignKey: 'client_id',targetKey: 'client_id'});
+
+
+
 // db.leads.hasMany(db.users , {as:'ersss',foreignKey: 'user_id',sourceKey: 'lead_added_by'});
 // db.leads.hasOne(db.users , {as:'ers',foreignKey: 'user_id',sourceKey: 'team_id'});
 // db.leads.hasOne(db.users , {as:'ers',foreignKey: 'user_id',sourceKey: 'lead_added_by'});

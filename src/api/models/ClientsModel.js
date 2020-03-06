@@ -121,8 +121,14 @@ module.exports = function(sequelize, DataTypes){
 	agreement_value: DataTypes.STRING,
 	booking_amount: DataTypes.STRING,
 
-})
-// leads.hasMany(user, {foreignKey: 'team_id'});
+},{
+	  // don't add the timestamp attributes (updatedAt, createdAt)
+		timestamps: false,
+		freezeTableName: true,
+  		// tableName: 'cli'
 
+	  // your other configuration here
+
+	})
 	return clients;
 };
