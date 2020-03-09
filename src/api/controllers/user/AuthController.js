@@ -1,5 +1,4 @@
-const { body, validationResult } = require("express-validator");
-const { sanitizeBody } = require("express-validator");
+const { validationResult } = require("express-validator");
 //helper file to prepare responses.
 const apiResponse = require("../../../helpers/apiResponse");
 // const UserDB = require("../../models/UsersModel_remove");

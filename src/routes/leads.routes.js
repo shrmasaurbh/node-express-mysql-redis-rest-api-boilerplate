@@ -9,6 +9,7 @@ const authenticate = require('../api/middleware/authorization').authenticate;
 
 router.post('/list', leadList.getLeadsListing);
 router.post('/list/status/:leadStatusType', leadList.getLeadsListingByStatusType);
+router.post('/add', lead.addLead);
 router.get('/leads_status', leadStatusList.getLeadStatus);
 router.get('/details/:leadId',lead.getLeadbyId);
 

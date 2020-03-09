@@ -73,6 +73,7 @@ db.lead_status = require("../api/models/LeadStatusModel")(sequelize,Sequelize);
 db.sources = require('../api/models/SourcesModel')(sequelize,Sequelize);
 db.users = require('../api/models/UserModel')(sequelize,Sequelize);
 db.clients = require('../api/models/ClientsModel')(sequelize,Sequelize);
+db.projects = require('../api/models/ProjectsModel')(sequelize,Sequelize);
 // db['leads'].belongsTo(db.users, {
 //   foreignKey: 'team_id',
 //   targetKey: 'team_id'
@@ -88,7 +89,7 @@ db.leads.hasOne(db.users , {as:'presalerm',foreignKey: 'user_id',sourceKey: 'pre
 db.leads.hasOne(db.users , {as:'referredby',foreignKey: 'user_id',sourceKey: 'referred_by'});
 db.leads.hasOne(db.users , {as:'magentrm',foreignKey: 'user_id',sourceKey: 'magent_rm'});
 db.leads.hasOne(db.users , {as:'crosssalerm',foreignKey: 'user_id',sourceKey: 'crosssale_rm'});
-db.leads.hasMany(db.clients , {as:'client_details',foreignKey: 'client_id',sourceKey: 'client_id'});
+db.leads.hasOne(db.clients , {as:'client_details',foreignKey: 'client_id',sourceKey: 'client_id'});
 db.clients.hasMany(db.leads , {as:'lead_details',foreignKey: 'client_id',sourceKey: 'client_id'});
 
 // db.clients.belongsTo(db.leads , {as:'lead_details', foreignKey: 'client_id',targetKey: 'client_id'});

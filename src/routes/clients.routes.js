@@ -4,11 +4,13 @@ var router = express.Router();
 const client = require("../api/controllers/clients/ClientsController");
 const clientList = require("../api/controllers/clients/ClientsListingController");
 // const clientStatusList = require("../api/controllers/clients/clientStatusController");
-// const middleware = require("../api/middleware/auth.middleware").authenticate;
+const middleware = require("../api/middleware/client.middleware");
 const authenticate = require('../api/middleware/authorization').authenticate;
 
 router.post('/list', clientList.getClientsListing);
 router.get('/details/:clientId',client.getClientById);
+router.post('/addclient',middleware.addClientMiddleware, client.addClient);
+
 // router.post('/list/status/:clientStatusType', clientList.getclientsListingByStatusType);
 // router.get('/clients_status', clientStatusList.getclientStatus);
 

@@ -4,6 +4,7 @@ var userRoutes = require("./user.routes");
 var searchRoutes = require("./search.routes");
 var leadsRoutes = require("./leads.routes");
 var clientsRoutes = require("./clients.routes");
+var projectRoutes = require("./project.routes");
 
 const router = express.Router();
 
@@ -12,5 +13,6 @@ router.use('/users', userRoutes);
 router.use('/search', searchRoutes);
 router.use('/leads', leadsRoutes);
 router.use('/clients', clientsRoutes);
+router.use('/projects', projectRoutes);
 
 module.exports = router;
