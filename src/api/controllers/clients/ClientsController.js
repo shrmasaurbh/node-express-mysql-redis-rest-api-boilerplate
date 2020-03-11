@@ -70,6 +70,45 @@ module.exports = {
             }
             
             
-        },
+    },
     
+    async getClientDetails(number) {
+        let res = {}
+        if(typeof number !== 'undefined' || !isNaN(number)){
+            var number = parseInt(number);
+            return await db.clients.findOne({
+                                              where: {
+                                                client_number: number
+                                              },
+                                              raw: true,
+                                            });
+        
+        }else{
+            return null;
+        }
+        
+    },
+
+    async addNewClient(details) {
+            
+        if(details.client_number != null && details.client_name != null ){
+
+
+                await db.clients.create(details).then(data => {
+                    console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                    console.log(data)
+                    return data;
+                    // apiResp.apiResp( req, res, data, meta =meta );
+                })
+                .catch(err => {
+                    return null;
+                    
+                })
+        }else{
+            return null;
+
+        }
+            
+            
+    },    
 }

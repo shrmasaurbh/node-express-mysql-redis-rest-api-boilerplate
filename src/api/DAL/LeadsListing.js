@@ -46,6 +46,12 @@ module.exports = {
                         {
                           model: db.sources,
                           as: "source",
+                        },
+                        {
+                          model: db.projects,
+                          as: "project_details",
+                          attributes: ['project_id','project_name','region_id','builder_name']
+
                         }
     	];
     	var status = {};

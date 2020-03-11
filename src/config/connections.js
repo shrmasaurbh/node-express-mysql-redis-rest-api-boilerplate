@@ -70,16 +70,20 @@ db.sequelize = sequelize;
 db.leads = require("../api/models/LeadsModel")(sequelize,Sequelize);
 db.closed_leads = require("../api/models/ClosedLeadsModel")(sequelize,Sequelize);
 db.lead_status = require("../api/models/LeadStatusModel")(sequelize,Sequelize);
+db.projects = require('../api/models/ProjectsModel')(sequelize,Sequelize);
 db.sources = require('../api/models/SourcesModel')(sequelize,Sequelize);
 db.users = require('../api/models/UserModel')(sequelize,Sequelize);
 db.clients = require('../api/models/ClientsModel')(sequelize,Sequelize);
-db.projects = require('../api/models/ProjectsModel')(sequelize,Sequelize);
+db.sources = require('../api/models/SourcesModel')(sequelize,Sequelize);
+db.region = require('../api/models/RegionModel')(sequelize,Sequelize);
+
 // db['leads'].belongsTo(db.users, {
 //   foreignKey: 'team_id',
 //   targetKey: 'team_id'
 // })
 // db.leads.belongsTo(db.users , {foreignKey: 'team_id'});
 // db.lead_status.belongsTo(db.leads , {foreignKey: 'status_id',sourceKey: 'lead_status_id'});
+db.leads.hasOne(db.projects , {as:'project_details',foreignKey: 'project_id',sourceKey: 'project_id'});
 db.leads.hasOne(db.lead_status , {as:'lead_status',foreignKey: 'status_id',sourceKey: 'lead_status_id'});
 db.leads.hasOne(db.sources , {as:'source',foreignKey: 'source_id',sourceKey: 'source_id'});
 

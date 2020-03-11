@@ -8,17 +8,18 @@ const middleware = require("../api/middleware/project.middleware");
 
 router
   .route('/list')
-  // .all(authenticate)
+  .all(authenticate)
   .post(projectCont.getProjectsListing)
   // .delete(projectCont.projectAll)
 
 router
   .route('/add')
+  .all(authenticate)
   .post(middleware.addProjectMiddleware, projectCont.projectAdd)
 
 router
   .route('/:project_id')
-  // .all(authenticate)
+  .all(authenticate)
   .get(projectCont.projectDetails)
   .put(middleware.updateProjectMiddleware, projectCont.projectUpdate)
   .delete(projectCont.projectDelete)

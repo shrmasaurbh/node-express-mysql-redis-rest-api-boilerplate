@@ -1,4 +1,5 @@
 const apiResp = require(BASEPATH+'/src/helpers/apiResponse');
+const clients = require('../clients/ClientsController');
 const db = require('../../../config/connections');
 const { validationResult } = require("express-validator");
 
@@ -58,6 +59,12 @@ module.exports = {
 																							{
 																							  model: db.sources,
 																							  as: "source",
+																							},
+																							{
+																							  model: db.projects,
+																							  as: "project_details",
+                                                                                              attributes: ['project_id','project_name','region_id','builder_name']
+																							  
 																							}
 																						  ]});
 			console.log(resultData);
@@ -98,9 +105,53 @@ module.exports = {
             // Display sanitized values/errors messages.
             // return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
         } else {
-		
+			var p_mobilenumber = parseInt(req.body.p_mobilenumber);
+			console.log(p_mobilenumber)
+			var client_details = await clients.getClientDetails(p_mobilenumber);
+			console.log(client_details)
+	        
+	        if(client_details != null){
+	        	var client_id = client_details.client_id;
+
+	            // const resultData = await db.clients.findByPk(clientId,{include: [{
+	            //      model: db.leads,
+	            //      as:'lead_details'
+	            // }]});
+	            // console.log(resultData);
+	            // if(resultData == null){
+	            //     err.message = "Client data not found";
+	            //     return apiResp.apiErr( req, res, 400, err);
+	            // }
+	            // // if(resultData.is_error){
+	            // //     meta.message = resultData.message;
+	            // //     return apiResp.apiErr( req, res, 400, meta);
+	            // // }
+	            // resultData['createdAt'] = new Date(resultData['createdAt']).toGMTString();
+	            // resultData['updatedAt'] = new Date(resultData['updatedAt']).toGMTString();
+	            // return  apiResp.apiResp( req, res, resultData, meta );
+	        
+	        }else{
+				const client_details = await clients.addNewClient(p_mobilenumber);
+				if(client_details != null){
+
+				}else{
+		            meta.message = "Client is not created";
+		            return apiResp.apiErr( req, res, 400, meta);
+
+				}
+	        }
 		}
 	},
+
+	async addNewLead(lead) {
+        let res = {}
+        if(typeof lead !== 'undefined' ){
+			        
+        }else{
+            return null;
+        }
+        
+    },
 
 	  
 }

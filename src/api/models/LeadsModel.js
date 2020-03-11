@@ -93,8 +93,8 @@ module.exports = function(sequelize, DataTypes){
               key: 'status_id' // <<< Note, its a column name
         },
 
-	project_name : {
-		type: DataTypes.STRING
+	project_id : {
+		type: DataTypes.INTEGER
 	},
 	revert_status : {
 		type: DataTypes.STRING
