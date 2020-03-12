@@ -99,7 +99,6 @@ module.exports = {
                var user = await db.users.findOne({ where: {mobile_number: req.body.mobile_number} })
                 if (user != null) {
                     user = user.dataValues
-               console.log("user", user.password)
                     //Compare given password with db's hash.
                     bcrypt.compare(req.body.password, user.password, function(err, match) {
                         var err = {}
@@ -110,7 +109,7 @@ module.exports = {
                             if (user.is_active) {
                                 // Check User's account active or not.
                                     let userData = {
-                                        id: user.id,
+                                        id: user.user_id,
                                         name: user.name,
                                         email: user.email,
                                     };
