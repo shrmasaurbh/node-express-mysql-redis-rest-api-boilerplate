@@ -33,4 +33,30 @@ module.exports = {
             apiResp.apiErr( req, res, 300, err);
         }       
     },
+
+    async getSourceId(source) {
+        try{
+            if(source != null){
+
+                await db.sources.findOne({ 
+                                            where: {source: source)} 
+                                        })
+                        .then(source_data => {
+                            
+                            if(source_data){
+                                return source_data.dataValues.source_id; 
+                                        
+                            }
+                            return null;
+                        })
+                        .catch(err => {
+                            return null;
+                        })
+            }
+        } 
+        catch (err) {
+            return null;
+
+        }       
+    },
 }

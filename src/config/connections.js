@@ -95,6 +95,8 @@ db.leads.hasOne(db.users , {as:'magentrm',foreignKey: 'user_id',sourceKey: 'mage
 db.leads.hasOne(db.users , {as:'crosssalerm',foreignKey: 'user_id',sourceKey: 'crosssale_rm'});
 db.leads.hasOne(db.clients , {as:'client_details',foreignKey: 'client_id',sourceKey: 'client_id'});
 db.clients.hasMany(db.leads , {as:'lead_details',foreignKey: 'client_id',sourceKey: 'client_id'});
+db.projects.hasOne(db.users , {foreignKey: 'user_id',sourceKey: 'project_addedby'});
+db.projects.hasOne(db.region , {foreignKey: 'region_id',sourceKey: 'region_id'});
 
 // db.clients.belongsTo(db.leads , {as:'lead_details', foreignKey: 'client_id',targetKey: 'client_id'});
 

@@ -44,7 +44,16 @@ module.exports = {
             // const resultData = await SearchDB.getSearchListing(urlObj);
             try{
                 // const resultData = await leadsDB.find(urlObj);
-                const { count, rows: projects } = await db.projects.findAndCountAll({ 
+                const { count, rows: projects } = await db.projects.findAndCountAll({  include: [
+                                                                                            {
+                                                                                              model: db.users,
+                                                                                              // as: "project_addedby",
+                                                                                            },
+                                                                                            {
+                                                                                              model: db.region,
+                                                                                              // as: "project_addedby",
+                                                                                            }
+                                                                                            ],
                                                                                 offset: fromData, limit: size
                                                                             });
                 if(count){
@@ -58,6 +67,9 @@ module.exports = {
                     
                     for (project of projects){
                         project.dataValues.added_date = new Date(project.dataValues.added_date).toGMTString();
+                        project.dataValues.project_addedby = project.dataValues.user.name;
+                        delete project.dataValues.user;
+                        delete project.dataValues.region_id;
                     }
 
                     return apiResp.apiResp( req, res, projects, meta );
@@ -104,16 +116,25 @@ module.exports = {
     async projectDetails(req, res) {
         try{
                         // console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-            await db.projects.findOne({ attributes: {
-                                                    exclude: ['password']
-                                                },
+            await db.projects.findOne({ include: [
+                                                    {
+                                                      model: db.users,
+                                                      // as: "project_addedby",
+                                                    },
+                                                    {
+                                                      model: db.region,
+                                                      // as: "project_addedby",
+                                                    }
+                                                ],
                                     where: {project_id: parseInt(req.params.project_id)} 
                                 })
                     .then(project_data => {
                         
                         if(project_data){
                         	project_data.dataValues.added_date = new Date(project_data.dataValues.added_date).toGMTString();
-
+                            project_data.dataValues.project_addedby = project_data.dataValues.user.name;
+                            delete project_data.dataValues.user;
+                            delete project_data.dataValues.region_id;
                             return apiResp.apiResp( req, res, project_data, meta );
                                     
                         }
@@ -231,6 +252,35 @@ module.exports = {
         } 
         catch (err) {
             apiResp.apiErr( req, res, 300, err);
+        }       
+    },
+
+    async getprojectId(p_name) {
+        try{
+                        // console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            if(p_name != null){
+
+                await db.projects.findOne({ 
+                                            where: {project_name: p_name)} 
+                                        })
+                        .then(project_data => {
+                            
+                            if(project_data){
+                                return project_data.dataValues.project_id; 
+                                        
+                            }
+                            return null;
+                        })
+                        .catch(err => {
+                            return null;
+                        })
+                        // console.log("project",project)
+            }else{
+                return null
+            }
+        } 
+        catch (err) {
+            return null;
         }       
     },
 

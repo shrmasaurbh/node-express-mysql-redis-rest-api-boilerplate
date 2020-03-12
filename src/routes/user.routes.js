@@ -7,9 +7,10 @@ const authenticate = require('../api/middleware/authorization').authenticate;
 
 router
   .route('/list')
-  .all(authenticate)
+  // .all(authenticate)
   .get(userCont.userAll)
   // .delete(userCont.userAll)
+
 router
   .route('/:user_id')
   // .all(authenticate)
