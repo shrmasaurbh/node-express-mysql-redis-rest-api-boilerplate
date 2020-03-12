@@ -125,6 +125,13 @@ module.exports = function(sequelize, DataTypes){
 	
 	assign_status : DataTypes.BOOLEAN,
 	
+	client_pref : {
+		type: DataTypes.STRING
+	},
+	utm_id : DataTypes.INTEGER,
+	
+	digital_id : DataTypes.INTEGER,
+
 	is_active : DataTypes.BOOLEAN,
 	
 	deleted_by : DataTypes.INTEGER,

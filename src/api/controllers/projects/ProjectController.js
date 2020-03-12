@@ -220,7 +220,7 @@ module.exports = {
                             // console.log(meta)
                             return apiResp.apiErr( req, res, 400, err);
                         }else{
-                        	req.body.project_status = 1;
+                        	req.body.project_status = 0;
                         	await db.projects.create(req.body)
                         		.then(data => {
 				                    var meta ={
@@ -261,7 +261,7 @@ module.exports = {
             if(p_name != null){
 
                 await db.projects.findOne({ 
-                                            where: {project_name: p_name)} 
+                                            where: {project_name: p_name} 
                                         })
                         .then(project_data => {
                             

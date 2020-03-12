@@ -1,5 +1,7 @@
 const apiResp = require(BASEPATH+'/src/helpers/apiResponse');
 const clients = require('../clients/ClientsController');
+const projects = require('../projects/ProjectController');
+const source = require('../misc/SourceController');
 const db = require('../../../config/connections');
 const { validationResult } = require("express-validator");
 
@@ -64,7 +66,7 @@ module.exports = {
 																							  model: db.projects,
 																							  as: "project_details",
                                                                                               attributes: ['project_id','project_name','region_id','builder_name']
-																							  
+
 																							}
 																						  ]});
 			console.log(resultData);
@@ -107,7 +109,8 @@ module.exports = {
         } else {
 			var p_mobilenumber = parseInt(req.body.p_mobilenumber);
 			console.log(p_mobilenumber)
-			var client_details = await clients.getClientDetails(p_mobilenumber);
+			var client_details ={};
+			client_details = await clients.getClientDetails(p_mobilenumber);
 			console.log(client_details)
 	        
 	        if(client_details != null){
@@ -131,7 +134,13 @@ module.exports = {
 	            // return  apiResp.apiResp( req, res, resultData, meta );
 	        
 	        }else{
-				const client_details = await clients.addNewClient(p_mobilenumber);
+	        	let client_details = {
+	        		client_name : req.body.p_username,
+					client_email : req.body.p_email,
+					client_number : req.body.p_mobilenumber,
+					// client_countrycode : req.body.p_countrycode,
+	        	}
+				client_details = await clients.addNewClient(client_details);
 				if(client_details != null){
 
 				}else{
@@ -146,7 +155,14 @@ module.exports = {
 	async addNewLead(lead) {
         let res = {}
         if(typeof lead !== 'undefined' ){
-			        
+			if(lead.p_leadtype){
+				let project_id = projects.getprojectId(lead.p_leadtype);
+				if(project_id){
+					source_id = source.getSourceId(lead.p_source);
+					lead_added_by = lead.p_lead_added_by;
+				}
+			}
+
         }else{
             return null;
         }

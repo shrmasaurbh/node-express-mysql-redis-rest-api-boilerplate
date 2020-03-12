@@ -39,7 +39,7 @@ module.exports = {
             if(source != null){
 
                 await db.sources.findOne({ 
-                                            where: {source: source)} 
+                                            where: {source: source} 
                                         })
                         .then(source_data => {
                             

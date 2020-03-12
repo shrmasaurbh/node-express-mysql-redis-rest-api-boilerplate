@@ -76,6 +76,8 @@ db.users = require('../api/models/UserModel')(sequelize,Sequelize);
 db.clients = require('../api/models/ClientsModel')(sequelize,Sequelize);
 db.sources = require('../api/models/SourcesModel')(sequelize,Sequelize);
 db.region = require('../api/models/RegionModel')(sequelize,Sequelize);
+db.utm = require('../api/models/UtmModel')(sequelize,Sequelize);
+db.digital = require('../api/models/DigitalModel')(sequelize,Sequelize);
 
 // db['leads'].belongsTo(db.users, {
 //   foreignKey: 'team_id',
@@ -87,6 +89,8 @@ db.leads.hasOne(db.projects , {as:'project_details',foreignKey: 'project_id',sou
 db.leads.hasOne(db.lead_status , {as:'lead_status',foreignKey: 'status_id',sourceKey: 'lead_status_id'});
 db.leads.hasOne(db.sources , {as:'source',foreignKey: 'source_id',sourceKey: 'source_id'});
 
+db.leads.hasOne(db.utm , {as:'utm_details',foreignKey: 'utm_id',sourceKey: 'utm_id'});
+db.leads.hasOne(db.digital , {as:'digital_details',foreignKey: 'digital_id',sourceKey: 'digital_id'});
 db.leads.hasOne(db.users , {as:'team',foreignKey: 'user_id',sourceKey: 'team_id'});
 db.leads.hasOne(db.users , {as:'lead_addedby',foreignKey: 'user_id',sourceKey: 'lead_added_by'});
 db.leads.hasOne(db.users , {as:'presalerm',foreignKey: 'user_id',sourceKey: 'presale_rm'});
