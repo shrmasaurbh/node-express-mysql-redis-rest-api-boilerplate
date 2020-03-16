@@ -18,6 +18,11 @@ router
   .post(middleware.addProjectMiddleware, projectCont.projectAdd)
 
 router
+  .route('/autocomplete')
+  .all(authenticate)
+  .get(projectCont.projectListAutocomplete)
+
+router
   .route('/:project_id')
   .all(authenticate)
   .get(projectCont.projectDetails)

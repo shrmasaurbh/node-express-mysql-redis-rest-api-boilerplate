@@ -1,4 +1,4 @@
-const Sequelize =require('sequelize')
+const Sequelize =require('sequelize');
 const db = require('../../config/connections');
 const {STATUS_TYPES} = require(BASEPATH+'/src/helpers/constants');
 const Op = Sequelize.Op; 

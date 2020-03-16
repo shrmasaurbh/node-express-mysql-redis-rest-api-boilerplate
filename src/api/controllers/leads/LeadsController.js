@@ -6,6 +6,8 @@ const utm = require('../misc/UtmController');
 const digital = require('../misc/DigitalController');
 const db = require('../../../config/connections');
 const { validationResult } = require("express-validator");
+const LeadDAL = require('../../DAL/Leads');
+
 
 var err = {
 			"message": ""
@@ -114,28 +116,15 @@ module.exports = {
 			console.log(p_mobilenumber)
 			var client_details = {};
 
-			var utm_data = {
-								utm_source  : req.body.p_utmsource,
-								utm_medium  : req.body.p_utmmedium,
-								utm_content : req.body.p_utmcontent,
-								utm_term    : req.body.p_utmterm
-							};
-			 utm_id = await utm.addUtm(utm_data);
-
-			 var digital_data = {
-								client_ipaddress  : req.body.p_ipaddress,
-								user_browser  : req.body.p_userbrowser,
-								p_useragent : req.body.p_useragent,
-							};
-			 digital_id = await digital.addDigital(digital_data);
-
+			
 			client_details = await clients.getClientDetails(p_mobilenumber);
 			// console.log(client_details)
-	        lead_data.region_id = p_regionid;
+	        // lead_data.region_id = p_regionid;
 
 	        if(client_details != null){
 	        	var client_id = client_details.client_id;
-
+	        	req.body.client_id = client_id;
+	        	await LeadDAL.addNewLead(req.body);
 
 	        }else{
 	        	let client_details = {
@@ -146,6 +135,8 @@ module.exports = {
 	        	}
 				client_details = await clients.addNewClient(client_details);
 				if(client_details != null){
+	        		req.body.client_id = client_details.client_id;
+	        		await LeadDAL.addNewLead(req.body);
 
 				}else{
 		            meta.message = "Client is not created";
@@ -156,29 +147,7 @@ module.exports = {
 		}
 	},
 
-	async addNewLead(lead) {
-        let lead_data = {}
-        if(typeof lead !== 'undefined' ){
-			if(lead.p_leadtype){
-				if(isNaN(lead.p_leadtype)){
-		        	// lead_data.project_id = lead.project_id;
-					lead_data.project_id = projects.getprojectId(lead.p_leadtype);
-
-				}else{
-		        	lead_data.project_id = lead.project_id;
-
-				}
-				if(lead_data.project_id){
-					source_id = source.getSourceId(lead.p_source);
-					lead_added_by = lead.p_lead_added_by;
-				}
-			}
-
-        }else{
-            return null;
-        }
-        
-    },
+	
 
 	  
 }

@@ -95,9 +95,9 @@ module.exports = {
 
 
                 await db.clients.create(details).then(data => {
-                    console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                    console.log("client_created=============")
                     console.log(data)
-                    return data;
+                    return data.dataValues;
                     // apiResp.apiResp( req, res, data, meta =meta );
                 })
                 .catch(err => {

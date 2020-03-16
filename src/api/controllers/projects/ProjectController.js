@@ -2,6 +2,10 @@
 const { validationResult } = require("express-validator");
 const apiResp = require(BASEPATH+'/src/helpers/apiResponse');
 const db = require('../../../config/connections');
+const Sequelize =require('sequelize');
+
+// const Op = Sequelize.Op;
+
 var err = {
             "message": ""
         };
@@ -264,14 +268,17 @@ module.exports = {
                                             where: {project_name: p_name} 
                                         })
                         .then(project_data => {
-                            
                             if(project_data){
-                                return project_data.dataValues.project_id; 
+                                var p_id = project_data.dataValues.project_id 
+                            console.log("project_data",p_id)
+                                return p_id; 
                                         
                             }
+                            console.log("project_data",project_data.dataValues.project_id)
                             return null;
                         })
                         .catch(err => {
+                            console.log("err in project_id",err)
                             return null;
                         })
                         // console.log("project",project)
@@ -283,5 +290,48 @@ module.exports = {
             return null;
         }       
     },
+
+    async projectListAutocomplete(req, res) {
+        const Op = Sequelize.Op;
+
+        if (typeof req.query.q !== 'undefined' || req.query.q !== null) {
+            var queryStr = req.query.q;
+
+// { where: { columnName: { $like: '%awe%' } } }
+            try{
+                            // console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                await db.projects.findAll({ 
+                                        where: {project_name:{ [Op.like]: '%'+queryStr+'%' } },
+                                        attributes: ['project_id','project_name']
+
+                                    })
+                        .then(project_data => {
+                            // console.log(project_data)
+                            if(project_data){
+                            //     project_data.dataValues.added_date = new Date(project_data.dataValues.added_date).toGMTString();
+                            //     project_data.dataValues.project_addedby = project_data.dataValues.user.name;
+                            //     delete project_data.dataValues.user;
+                            //     delete project_data.dataValues.region_id;
+                                return apiResp.apiResp( req, res, project_data, meta );
+                                        
+                            }
+                            err.message = "project not found"
+                            // // console.log(meta)
+                            return apiResp.apiErr( req, res, 400, err);
+                            // throw new Error('Invalid object');
+                            
+                            // console.log(aa)
+                            // res.status(200).send(data);
+                        })
+                        .catch(err => {
+                            apiResp.apiErr( req, res, 300, err);
+                        })
+                        // console.log("project",project)
+            } 
+            catch (err) {
+                apiResp.apiErr( req, res, 300, err);
+            } 
+        }      
+    }
 
 }
