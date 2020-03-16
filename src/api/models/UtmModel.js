@@ -15,6 +15,9 @@ module.exports = function(sequelize, DataTypes){
 		utm_medium : {
 			type: DataTypes.STRING
 		},
+		utm_source : {
+			type: DataTypes.STRING
+		},
 		utm_term : {
 			type: DataTypes.STRING
 		},

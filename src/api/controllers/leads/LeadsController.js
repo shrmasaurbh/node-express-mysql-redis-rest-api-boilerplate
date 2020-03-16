@@ -2,6 +2,8 @@ const apiResp = require(BASEPATH+'/src/helpers/apiResponse');
 const clients = require('../clients/ClientsController');
 const projects = require('../projects/ProjectController');
 const source = require('../misc/SourceController');
+const utm = require('../misc/UtmController');
+const digital = require('../misc/DigitalController');
 const db = require('../../../config/connections');
 const { validationResult } = require("express-validator");
 
@@ -107,32 +109,34 @@ module.exports = {
             // Display sanitized values/errors messages.
             // return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
         } else {
+
 			var p_mobilenumber = parseInt(req.body.p_mobilenumber);
 			console.log(p_mobilenumber)
-			var client_details ={};
+			var client_details = {};
+
+			var utm_data = {
+								utm_source  : req.body.p_utmsource,
+								utm_medium  : req.body.p_utmmedium,
+								utm_content : req.body.p_utmcontent,
+								utm_term    : req.body.p_utmterm
+							};
+			 utm_id = await utm.addUtm(utm_data);
+
+			 var digital_data = {
+								client_ipaddress  : req.body.p_ipaddress,
+								user_browser  : req.body.p_userbrowser,
+								p_useragent : req.body.p_useragent,
+							};
+			 digital_id = await digital.addDigital(digital_data);
+
 			client_details = await clients.getClientDetails(p_mobilenumber);
-			console.log(client_details)
-	        
+			// console.log(client_details)
+	        lead_data.region_id = p_regionid;
+
 	        if(client_details != null){
 	        	var client_id = client_details.client_id;
 
-	            // const resultData = await db.clients.findByPk(clientId,{include: [{
-	            //      model: db.leads,
-	            //      as:'lead_details'
-	            // }]});
-	            // console.log(resultData);
-	            // if(resultData == null){
-	            //     err.message = "Client data not found";
-	            //     return apiResp.apiErr( req, res, 400, err);
-	            // }
-	            // // if(resultData.is_error){
-	            // //     meta.message = resultData.message;
-	            // //     return apiResp.apiErr( req, res, 400, meta);
-	            // // }
-	            // resultData['createdAt'] = new Date(resultData['createdAt']).toGMTString();
-	            // resultData['updatedAt'] = new Date(resultData['updatedAt']).toGMTString();
-	            // return  apiResp.apiResp( req, res, resultData, meta );
-	        
+
 	        }else{
 	        	let client_details = {
 	        		client_name : req.body.p_username,
@@ -153,11 +157,18 @@ module.exports = {
 	},
 
 	async addNewLead(lead) {
-        let res = {}
+        let lead_data = {}
         if(typeof lead !== 'undefined' ){
 			if(lead.p_leadtype){
-				let project_id = projects.getprojectId(lead.p_leadtype);
-				if(project_id){
+				if(isNaN(lead.p_leadtype)){
+		        	// lead_data.project_id = lead.project_id;
+					lead_data.project_id = projects.getprojectId(lead.p_leadtype);
+
+				}else{
+		        	lead_data.project_id = lead.project_id;
+
+				}
+				if(lead_data.project_id){
 					source_id = source.getSourceId(lead.p_source);
 					lead_added_by = lead.p_lead_added_by;
 				}

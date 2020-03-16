@@ -12,9 +12,9 @@ module.exports = function(sequelize, DataTypes){
 
 		},
 
-		lead_id : {
-			type: DataTypes.INTEGER
-		},
+		// lead_id : {
+		// 	type: DataTypes.INTEGER
+		// },
 		user_device : {
 			type: DataTypes.STRING
 		},
