@@ -94,7 +94,7 @@ module.exports = {
         if(details.client_number != null && details.client_name != null ){
 
 
-                await db.clients.create(details).then(data => {
+                return await db.clients.create(details).then(data => {
                     console.log("client_created=============")
                     console.log(data)
                     return data.dataValues;

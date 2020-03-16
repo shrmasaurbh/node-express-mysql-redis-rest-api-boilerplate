@@ -9,57 +9,61 @@ const Op = Sequelize.Op;
 
 module.exports = {
 
-    async DuplicateLead(client_id,project_id) {
+    async DuplicateLead(client_id,project_id,leadStatusType) {
 
     	// var include = [ ];
-    	var include = [ {
-                          model: db.users,
-                          as: "team",
-                          attributes: ['user_id','name']
-                        },
-                        {
-                          model: db.users,
-                          as: "lead_addedby",
-                          attributes: ['user_id','name']
-                        },
-                        {
-                          model: db.users,
-                          as: "presalerm",
-                          attributes: ['user_id','name']
-                        },
-                        {
-                          model: db.users,
-                          as: "referredby",
-                          attributes: ['user_id','name']
-                        },
-                        {
-                          model: db.users,
-                          as: "crosssalerm",
-                          attributes: ['user_id','name']
-                        },
-                        {
-                          model: db.users,
-                          as: "magentrm",
-                          attributes: ['user_id','name']
-                        },
-                        {
-                          model: db.clients,
-                          as: "client_details",
-                          attributes: ['client_id','client_name','client_email','client_number']
-                        },
-                        {
-                          model: db.sources,
-                          as: "source",
-                        },
-                        {
-                          model: db.projects,
-                          as: "project_details",
-                          attributes: ['project_id','project_name','region_id','builder_name']
+    	var include = [ 
+                        // {
+                        //   model: db.users,
+                        //   as: "team",
+                        //   attributes: ['user_id','name']
+                        // },
+                        // {
+                        //   model: db.users,
+                        //   as: "lead_addedby",
+                        //   attributes: ['user_id','name']
+                        // },
+                        // {
+                        //   model: db.users,
+                        //   as: "presalerm",
+                        //   attributes: ['user_id','name']
+                        // },
+                        // {
+                        //   model: db.users,
+                        //   as: "referredby",
+                        //   attributes: ['user_id','name']
+                        // },
+                        // {
+                        //   model: db.users,
+                        //   as: "crosssalerm",
+                        //   attributes: ['user_id','name']
+                        // },
+                        // {
+                        //   model: db.users,
+                        //   as: "magentrm",
+                        //   attributes: ['user_id','name']
+                        // },
+                        // {
+                        //   model: db.clients,
+                        //   as: "client_details",
+                        //   attributes: ['client_id','client_name','client_email','client_number']
+                        // },
+                        // {
+                        //   model: db.sources,
+                        //   as: "source",
+                        // },
+                        // {
+                        //   model: db.projects,
+                        //   as: "project_details",
+                        //   attributes: ['project_id','project_name','region_id','builder_name']
 
-                        }
+                        // }
     	];
     	var status = {};
-    	var where = {};
+    	var where = {
+        client_id : client_id,
+        project_id : project_id,
+      };
     	switch(leadStatusType) {
 			case "closed" :
 			case "booked" :
@@ -117,23 +121,20 @@ module.exports = {
                           // required: true,
                           where:{
                             // status : STATUS_TYPES[leadStatusType]
-                            status :{[Op.notIn]:["closed","booked","cancel", "bulk upload","not update"]}
+                            status :{[Op.in]:["closed","booked","cancel", "bulk upload","not update"]}
 
                           }
                         };
-                where= {
-					    assign_status: 1
-					  //   // $and: [
-       //                   assign_status: 0 ,
-       //                   '$lead_status.status$': STATUS_TYPES[leadStatusType]
-       //              // ]
-					  };
+                
                 break;
 		}
 
 		include.push(status);
 		// console.log("default_include",default_include);
-return await db.leads.findAndCountAll({  where,include , offset: fromData, limit: size });
+  return await db.leads.findAndCountAll({  where,include });
+// for (lead of leads){
+//   console.log(lead)
+//   }
 
 
 	},
@@ -145,9 +146,10 @@ async addNewLead(lead) {
       if(lead.p_leadtype){
         if(isNaN(lead.p_leadtype)){
               // lead_data.project_id = lead.project_id;
-          let project_id = await projects.getprojectId(lead.p_leadtype);
+          let project_id =  await projects.getprojectId(lead.p_leadtype);
           // lead_data.project_id
-        console.log("lead_data.project_id",project_id)
+        // console.log("lead_data.project_id",project_id)
+              lead_data.project_id = project_id;
 
         }else{
               lead_data.project_id = lead.project_id;
@@ -155,7 +157,12 @@ async addNewLead(lead) {
         }
         // console.log("lead_data.project_id",lead_data.project_id)
         if(lead_data.project_id){
-
+          console.log("in iffff")
+          const { count, rows: duplicate_leads } = await module.exports.DuplicateLead(lead.client_id, lead_data.project_id, "open");
+          if(count){
+            return {duplicate_lead :1, leads: duplicate_leads}
+          } 
+          // console.log("duplicate_lead",duplicate_lead)
           if(lead.p_utmsource){
             var utm_data = {
                   utm_source  : lead.p_utmsource,
@@ -189,7 +196,7 @@ async addNewLead(lead) {
           }
 
           source_id = await source.getSourceId(lead.p_source);
-          // console.log("dddddddddd",source_id )
+
           if(source_id){
             lead_data.source_id = source_id;  
           }
@@ -210,11 +217,13 @@ async addNewLead(lead) {
           }
 
           lead_data.client_id = lead.client_id;
+          lead_data.lead_status_id = 1;
           
-          await db.leads.create(lead_data).then(data => {
+
+          return await db.leads.create(lead_data).then(data => {
                       console.log("lead addddddddddddddd")
                       console.log(data)
-                      return data;
+                      return {duplicate_lead :0, leads: data}
                       // apiResp.apiResp( req, res, data, meta =meta );
                   })
                   .catch(err => {

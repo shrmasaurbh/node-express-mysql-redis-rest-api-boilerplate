@@ -12,6 +12,12 @@ router
   // .delete(userCont.userAll)
 
 router
+  .route('/autocomplete')
+  .all(authenticate)
+  .get(userCont.userListAutocomplete)
+
+
+router
   .route('/:user_id')
   // .all(authenticate)
   .get(userCont.userDetails)

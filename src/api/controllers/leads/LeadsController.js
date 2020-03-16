@@ -77,7 +77,7 @@ module.exports = {
 			if(resultData == null){
 				err.message = "Lead data not found";
 
-				apiResp.apiErr( req, res, 400, err);
+				return apiResp.apiErr( req, res, 400, err);
 			}
 
 			// if(resultData.is_error){
@@ -86,7 +86,7 @@ module.exports = {
 			// }
 			resultData['createdAt'] = new Date(resultData['createdAt']).toGMTString();
 			resultData['updatedAt'] = new Date(resultData['updatedAt']).toGMTString();
-			apiResp.apiResp( req, res, resultData, meta );
+			return apiResp.apiResp( req, res, resultData, meta );
 
 		
 
@@ -114,7 +114,7 @@ module.exports = {
 
 			var p_mobilenumber = parseInt(req.body.p_mobilenumber);
 			console.log(p_mobilenumber)
-			var client_details = {};
+			var client_details = lead_deatils = {};
 
 			
 			client_details = await clients.getClientDetails(p_mobilenumber);
@@ -124,7 +124,7 @@ module.exports = {
 	        if(client_details != null){
 	        	var client_id = client_details.client_id;
 	        	req.body.client_id = client_id;
-	        	await LeadDAL.addNewLead(req.body);
+	        	lead_deatils = await LeadDAL.addNewLead(req.body);
 
 	        }else{
 	        	let client_details = {
@@ -136,7 +136,7 @@ module.exports = {
 				client_details = await clients.addNewClient(client_details);
 				if(client_details != null){
 	        		req.body.client_id = client_details.client_id;
-	        		await LeadDAL.addNewLead(req.body);
+	        		lead_deatils = await LeadDAL.addNewLead(req.body);
 
 				}else{
 		            meta.message = "Client is not created";
@@ -144,6 +144,18 @@ module.exports = {
 
 				}
 	        }
+
+		    meta.status = 201;
+	        if(lead_deatils){
+		        if(lead_deatils.duplicate_lead){
+		        	meta.status = 208;
+					return apiResp.apiResp( req, res, lead_deatils.leads, meta );
+
+		        }
+				return apiResp.apiResp( req, res, lead_deatils.leads, meta );
+			}
+            return apiResp.apiErr( req, res, 400, meta);
+
 		}
 	},
 

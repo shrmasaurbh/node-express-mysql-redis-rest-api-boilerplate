@@ -264,24 +264,21 @@ module.exports = {
                         // console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
             if(p_name != null){
 
-                await db.projects.findOne({ 
+                return await db.projects.findOne({ 
                                             where: {project_name: p_name} 
                                         })
                         .then(project_data => {
                             if(project_data){
-                                var p_id = project_data.dataValues.project_id 
-                            console.log("project_data",p_id)
-                                return p_id; 
+                                return project_data.dataValues.project_id; 
                                         
                             }
-                            console.log("project_data",project_data.dataValues.project_id)
                             return null;
                         })
                         .catch(err => {
                             console.log("err in project_id",err)
                             return null;
                         })
-                        // console.log("project",project)
+                        // console.log("project",project_id)
             }else{
                 return null
             }
@@ -297,7 +294,6 @@ module.exports = {
         if (typeof req.query.q !== 'undefined' || req.query.q !== null) {
             var queryStr = req.query.q;
 
-// { where: { columnName: { $like: '%awe%' } } }
             try{
                             // console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 await db.projects.findAll({ 

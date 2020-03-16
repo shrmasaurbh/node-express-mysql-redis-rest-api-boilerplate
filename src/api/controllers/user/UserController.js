@@ -133,6 +133,45 @@ module.exports = {
             apiResp.apiErr( req, res, 300, err);
         }       
     },
+
+    async userListAutocomplete(req, res) {
+        const Op = Sequelize.Op;
+
+        if (typeof req.query.q !== 'undefined' || req.query.q !== null) {
+            var queryStr = req.query.q;
+
+            try{
+                            // console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                await db.projects.findAll({ 
+                                        where: {name:{ [Op.like]: '%'+queryStr+'%' } },
+                                        attributes: ['user_id','name']
+
+                                    })
+                        .then(user_data => {
+                            // console.log(user_data)
+                            if(user_data){
+                                return apiResp.apiResp( req, res, user_data, meta );
+                                        
+                            }
+                            err.message = "user not found"
+                            // // console.log(meta)
+                            return apiResp.apiErr( req, res, 400, err);
+                            // throw new Error('Invalid object');
+                            
+                            // console.log(aa)
+                            // res.status(200).send(data);
+                        })
+                        .catch(err => {
+                            apiResp.apiErr( req, res, 300, err);
+                        })
+                        // console.log("project",project)
+            } 
+            catch (err) {
+                apiResp.apiErr( req, res, 300, err);
+            } 
+        }      
+    }
+
 //     // FETCH all Customers
 // exports.findAll = (req, res) => {
 //   Customer.findAll().then(customers => {
